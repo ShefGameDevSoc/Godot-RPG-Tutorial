@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b1uej8141ci00"]
+
+[ext_resource type="Script" path="res://rpg_actor.gd" id="1_8risv"]
+
+[node name="RPGActor" type="Node"]
+script = ExtResource("1_8risv")

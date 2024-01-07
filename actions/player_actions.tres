@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="ActionLibrary" load_steps=3 format=3 uid="uid://ba0onq0amvcdi"]
+
+[ext_resource type="Script" path="res://actions/action_library.gd" id="1_tb2k5"]
+[ext_resource type="Resource" uid="uid://cghp2ukp5owic" path="res://actions/simple.tres" id="1_vf4r1"]
+
+[resource]
+script = ExtResource("1_tb2k5")
+actions = Array[Resource("res://action.gd")]([ExtResource("1_vf4r1")])

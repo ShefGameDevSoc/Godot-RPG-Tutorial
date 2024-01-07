@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://blrf7dhnix177"]
+
+[ext_resource type="Script" path="res://battle_ground.gd" id="1_vqgrq"]
+[ext_resource type="Texture2D" uid="uid://cqwegsjt67ss5" path="res://colour_grid.png" id="2_b7u1t"]
+
+[node name="BattleGround" type="Node2D"]
+script = ExtResource("1_vqgrq")
+
+[node name="BKG" type="Sprite2D" parent="."]
+position = Vector2(390, 390)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("2_b7u1t")
+
+[node name="Actors" type="Node" parent="."]
+
+[node name="HUDs" type="Node" parent="."]

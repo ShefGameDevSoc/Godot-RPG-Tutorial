@@ -1,0 +1,55 @@
+[gd_scene load_steps=2 format=3 uid="uid://xgmiul02cisf"]
+
+[ext_resource type="Script" path="res://battle_hud.gd" id="1_0t4ao"]
+
+[node name="BattleHUD" type="MarginContainer" node_paths=PackedStringArray("attack_button", "skip_button")]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -201.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+script = ExtResource("1_0t4ao")
+attack_button = NodePath("UI/HBoxContainer/Attack/Ac_Attack")
+skip_button = NodePath("UI/HBoxContainer/Skip/Ac_Skip")
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Attack" type="Control" parent="UI/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+
+[node name="Ac_Attack" type="Button" parent="UI/HBoxContainer/Attack"]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "Attack"
+
+[node name="Skip" type="Control" parent="UI/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+
+[node name="Ac_Skip" type="Button" parent="UI/HBoxContainer/Skip"]
+layout_mode = 0
+offset_right = 58.0
+offset_bottom = 31.0
+text = "Skip"
+
+[connection signal="pressed" from="UI/HBoxContainer/Attack/Ac_Attack" to="." method="_on_ac_attack_pressed"]
+[connection signal="pressed" from="UI/HBoxContainer/Skip/Ac_Skip" to="." method="_on_ac_skip_pressed"]
