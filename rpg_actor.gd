@@ -13,5 +13,7 @@ func make_choice() -> void:
 	if selector == null:
 		print("%s's selector is unassigned" % name)
 		return
-	await selector.action_selected
-	print("Selection Made")
+	var action: Action = await selector.action_selected
+	if action == null:
+		return
+	print(action.name)

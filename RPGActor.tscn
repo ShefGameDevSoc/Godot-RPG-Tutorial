@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://b1uej8141ci00"]
+[gd_scene load_steps=3 format=3 uid="uid://b1uej8141ci00"]
 
 [ext_resource type="Script" path="res://rpg_actor.gd" id="1_8risv"]
+[ext_resource type="Resource" uid="uid://ba0onq0amvcdi" path="res://actions/player_actions.tres" id="2_7jg41"]
 
 [node name="RPGActor" type="Node"]
 script = ExtResource("1_8risv")
+library = ExtResource("2_7jg41")

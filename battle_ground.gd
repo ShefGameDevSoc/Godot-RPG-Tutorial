@@ -12,6 +12,7 @@ func _ready() -> void:
 	for i in 1:
 		var actor: RPGActor = ps_rpg_actor.instantiate()
 		var hud: BattleHUD = ps_selection_hud.instantiate()
+		hud.populate_action_list(actor.library)
 		_actors.add_child(actor)
 		_huds.add_child(hud)
 		
@@ -21,9 +22,11 @@ func _ready() -> void:
 	for i in 1:
 		var actor: RPGActor = ps_rpg_actor.instantiate()
 		var hud: BattleHUD = ps_selection_hud.instantiate()
+		hud.populate_action_list(actor.library)
 		_actors.add_child(actor)
 		_huds.add_child(hud)
 		
+		actor.selector = hud
 		actor.action_selection_started.connect(hud._on_rpg_actor_selection_started)
 
 func _execute_turn() -> void:
