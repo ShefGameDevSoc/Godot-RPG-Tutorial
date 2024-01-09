@@ -15,14 +15,24 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 script = ExtResource("1_0t4ao")
-attack_button = NodePath("UI/Main/Attack/Ac_Attack")
-skip_button = NodePath("UI/Main/Skip/Ac_Skip")
-action_list = NodePath("UI/CommandList/ScrollContainer/VBoxContainer")
+attack_button = NodePath("UI/Menus/Main/Attack/Ac_Attack")
+skip_button = NodePath("UI/Menus/Main/Skip/Ac_Skip")
+action_list = NodePath("UI/Menus/CommandList/ScrollContainer/VBoxContainer")
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 2
 
-[node name="Main" type="HBoxContainer" parent="UI"]
+[node name="CharacterName" type="Label" parent="UI"]
+layout_mode = 0
+offset_left = 13.0
+offset_top = -24.0
+offset_right = 210.0
+offset_bottom = 16.0
+theme_override_font_sizes/font_size = 29
+text = "Placeholder"
+vertical_alignment = 2
+
+[node name="Menus" type="Control" parent="UI"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -30,23 +40,31 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Attack" type="CenterContainer" parent="UI/Main"]
+[node name="Main" type="HBoxContainer" parent="UI/Menus"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Attack" type="CenterContainer" parent="UI/Menus/Main"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Ac_Attack" type="Button" parent="UI/Main/Attack"]
+[node name="Ac_Attack" type="Button" parent="UI/Menus/Main/Attack"]
 layout_mode = 2
 text = "Attack"
 
-[node name="Skip" type="CenterContainer" parent="UI/Main"]
+[node name="Skip" type="CenterContainer" parent="UI/Menus/Main"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Ac_Skip" type="Button" parent="UI/Main/Skip"]
+[node name="Ac_Skip" type="Button" parent="UI/Menus/Main/Skip"]
 layout_mode = 2
 text = "Skip"
 
-[node name="CommandList" type="HBoxContainer" parent="UI"]
+[node name="CommandList" type="HBoxContainer" parent="UI/Menus"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -55,23 +73,44 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CenterContainer" type="CenterContainer" parent="UI/CommandList"]
+[node name="CenterContainer" type="CenterContainer" parent="UI/Menus/CommandList"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="CLBackButton" type="Button" parent="UI/CommandList/CenterContainer"]
+[node name="CLBackButton" type="Button" parent="UI/Menus/CommandList/CenterContainer"]
 layout_mode = 2
 text = "Back"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="UI/CommandList"]
+[node name="ScrollContainer" type="ScrollContainer" parent="UI/Menus/CommandList"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.12
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/CommandList/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Menus/CommandList/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[connection signal="pressed" from="UI/Main/Attack/Ac_Attack" to="." method="_on_ac_attack_pressed"]
-[connection signal="pressed" from="UI/Main/Skip/Ac_Skip" to="." method="_on_ac_skip_pressed"]
-[connection signal="pressed" from="UI/CommandList/CenterContainer/CLBackButton" to="." method="_on_command_list_back_button_pressed"]
+[node name="SelectTarget" type="Control" parent="UI/Menus"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="UI/Menus/SelectTarget"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -51.0
+offset_right = 135.0
+grow_vertical = 0
+text = "Back"
+alignment = 0
+
+[connection signal="pressed" from="UI/Menus/Main/Attack/Ac_Attack" to="." method="_on_ac_attack_pressed"]
+[connection signal="pressed" from="UI/Menus/Main/Skip/Ac_Skip" to="." method="_on_ac_skip_pressed"]
+[connection signal="pressed" from="UI/Menus/CommandList/CenterContainer/CLBackButton" to="." method="_on_command_list_back_button_pressed"]
+[connection signal="pressed" from="UI/Menus/SelectTarget/Button" to="." method="_on_select_target_back_pressed"]

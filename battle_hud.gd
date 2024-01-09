@@ -1,7 +1,7 @@
 class_name BattleHUD
 extends Control
 
-signal action_selected(action)
+signal action_selected(target, action)
 
 const ps_action_entry := preload("res://ActionEntry.tscn")
 
@@ -9,8 +9,25 @@ const ps_action_entry := preload("res://ActionEntry.tscn")
 @export var skip_button: Button
 @export var action_list: Control
 
-@onready var view_main := $UI/Main
-@onready var view_command_list := $UI/CommandList
+@onready var view_main := $UI/Menus/Main
+@onready var view_command_list := $UI/Menus/CommandList
+@onready var view_select_target := $UI/Menus/SelectTarget
+
+var _selected_action: Action = null
+var _target: RPGActor = null
+
+var _targetable_actors: Array[RPGActor]
+
+func open_hud(me: RPGActor, targetable_actors: Array[RPGActor]) -> void:
+	_show()
+	_targetable_actors = targetable_actors
+	for rpg_actor in _targetable_actors:
+		rpg_actor.body_selected.connect(self._on_rpg_actor_body_selected)
+
+func close_hud() -> void:
+	_hide()
+	for rpg_actor in _targetable_actors:
+		rpg_actor.body_selected.disconnect(self._on_rpg_actor_body_selected)
 
 func _ready() -> void:
 	_hide()
@@ -22,21 +39,20 @@ func populate_action_list(lib: ActionLibrary) -> void:
 		action_list.add_child(entry)
 		entry.action_entry_selected.connect(self._on_action_entry_selected)
 
-func _on_rpg_actor_selection_started() -> void:
-	_show()
-
 func _on_ac_attack_pressed():
 	view_main.hide()
 	view_command_list.show()
+	view_select_target.hide()
 
 func _on_ac_skip_pressed():
 	action_selected.emit()
-	_hide()
+	close_hud()
 
 func _on_action_entry_selected(action: Action) -> void:
-	action_selected.emit(action)
-	_hide()
-
+	_selected_action = action
+	view_main.hide()
+	view_command_list.hide()
+	view_select_target.show()
 
 func _show() -> void:
 	position.x = 0
@@ -45,6 +61,7 @@ func _show() -> void:
 
 	view_main.show()
 	view_command_list.hide()
+	view_select_target.hide()
 
 func _hide() -> void:
 	position.x = size.x * 2
@@ -52,8 +69,21 @@ func _hide() -> void:
 	skip_button.mouse_filter = Control.MOUSE_FILTER_PASS
 	view_main.hide()
 	view_command_list.hide()
-
+	view_select_target.hide()
 
 func _on_command_list_back_button_pressed() -> void:
 	view_main.show()
 	view_command_list.hide()
+	view_select_target.hide()
+
+func _on_select_target_back_pressed():
+	view_main.hide()
+	view_command_list.show()
+	view_select_target.hide()
+
+func _submit_action(action: Action, target: RPGActor) -> void:
+	action_selected.emit(target, action)
+	close_hud()
+
+func _on_rpg_actor_body_selected(actor: RPGActor) -> void:
+	_submit_action(_selected_action, actor)

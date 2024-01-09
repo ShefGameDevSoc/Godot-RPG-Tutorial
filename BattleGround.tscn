@@ -7,10 +7,10 @@
 script = ExtResource("1_vqgrq")
 
 [node name="BKG" type="Sprite2D" parent="."]
-position = Vector2(390, 390)
-scale = Vector2(0.8, 0.8)
 texture = ExtResource("2_b7u1t")
+
+[node name="Camera2D" type="Camera2D" parent="."]
 
 [node name="Actors" type="Node" parent="."]
 
-[node name="HUDs" type="Node" parent="."]
+[node name="HUDs" type="CanvasLayer" parent="."]
