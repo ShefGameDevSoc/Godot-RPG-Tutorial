@@ -1,7 +1,7 @@
 extends Node2D
 
-const ps_rpg_actor := preload("res://RPGActor.tscn")
-const ps_selection_hud := preload("res://BattleHUD.tscn")
+const ps_rpg_actor := preload("res://actors/battleground/BGActor.tscn")
+const ps_selection_hud := preload("res://battlegrounds/ui/BattleHUD.tscn")
 
 @onready var _actors := $Actors
 @onready var _huds := $HUDs
@@ -10,7 +10,7 @@ var in_turn: bool = false
 
 func _ready() -> void:
 	for i in 1:
-		var actor: RPGActor = ps_rpg_actor.instantiate()
+		var actor: BGActor = ps_rpg_actor.instantiate()
 		actor.position.x = -200
 		var hud: BattleHUD = ps_selection_hud.instantiate()
 		hud.populate_action_list(actor.library)
@@ -24,7 +24,7 @@ func _ready() -> void:
 		actor.update_health()
 
 	for i in 1:
-		var actor: RPGActor = ps_rpg_actor.instantiate()
+		var actor: BGActor = ps_rpg_actor.instantiate()
 		actor.position.x = 200
 		var hud: BattleHUD = ps_selection_hud.instantiate()
 		hud.populate_action_list(actor.library)
@@ -44,17 +44,17 @@ func _execute_turn() -> void:
 	in_turn = true
 	# Sort by speed
 	var all_actors := _actors.get_children()
-	var speed_sorted: Array[RPGActor] = []
+	var speed_sorted: Array[BGActor] = []
 	for rpga in all_actors:
-		if rpga is RPGActor:
-			speed_sorted.append(rpga as RPGActor)
+		if rpga is BGActor:
+			speed_sorted.append(rpga as BGActor)
 
 	for rpga in speed_sorted:
 		print(rpga.name)
 		var params := await rpga.make_choice(speed_sorted)
 		if len(params) == 0:
 			continue
-		var target: RPGActor = params[0]
+		var target: BGActor = params[0]
 		var action: Action = params[1]
 		_calculate_damage(rpga, target, action)
 
@@ -64,7 +64,7 @@ func _process(delta: float) -> void:
 	if not in_turn:
 		_execute_turn()
 
-func _calculate_damage(user: RPGActor, target: RPGActor, action: Action) -> void:
+func _calculate_damage(user: BGActor, target: BGActor, action: Action) -> void:
 	if float(action.accuracy) < randf() * 100.0:
 		return
 

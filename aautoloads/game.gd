@@ -1,6 +1,6 @@
 extends Node
 
-var world: World = null
+var world: Overworld = null
 
 func _ready():
 	var worlds := get_tree().get_nodes_in_group("world")

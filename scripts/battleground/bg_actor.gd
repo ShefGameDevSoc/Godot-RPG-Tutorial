@@ -1,4 +1,4 @@
-class_name RPGActor
+class_name BGActor
 extends CharacterBody2D
 
 signal action_selection_started(me, targetable_actors)
@@ -13,9 +13,9 @@ var character: Character
 
 var selector = null
 
-func make_choice(all_actors: Array[RPGActor]) -> Array:
+func make_choice(all_actors: Array[BGActor]) -> Array:
 	# Filter out untargetable actors
-	var actors: Array[RPGActor] = []
+	var actors: Array[BGActor] = []
 	for rpga in all_actors:
 		if rpga == self:
 			continue

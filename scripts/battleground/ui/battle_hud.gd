@@ -3,7 +3,7 @@ extends Control
 
 signal action_selected(target, action)
 
-const ps_action_entry := preload("res://ActionEntry.tscn")
+const ps_action_entry := preload("res://battlegrounds/ui/ActionEntry.tscn")
 
 @export var attack_button: Button
 @export var skip_button: Button
@@ -14,11 +14,11 @@ const ps_action_entry := preload("res://ActionEntry.tscn")
 @onready var view_select_target := $UI/Menus/SelectTarget
 
 var _selected_action: Action = null
-var _target: RPGActor = null
+var _target: BGActor = null
 
-var _targetable_actors: Array[RPGActor]
+var _targetable_actors: Array[BGActor]
 
-func open_hud(me: RPGActor, targetable_actors: Array[RPGActor]) -> void:
+func open_hud(me: BGActor, targetable_actors: Array[BGActor]) -> void:
 	_show()
 	_targetable_actors = targetable_actors
 	for rpg_actor in _targetable_actors:
@@ -81,9 +81,9 @@ func _on_select_target_back_pressed():
 	view_command_list.show()
 	view_select_target.hide()
 
-func _submit_action(action: Action, target: RPGActor) -> void:
+func _submit_action(action: Action, target: BGActor) -> void:
 	action_selected.emit(target, action)
 	close_hud()
 
-func _on_rpg_actor_body_selected(actor: RPGActor) -> void:
+func _on_rpg_actor_body_selected(actor: BGActor) -> void:
 	_submit_action(_selected_action, actor)

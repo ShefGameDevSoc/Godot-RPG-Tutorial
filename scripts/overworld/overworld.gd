@@ -1,20 +1,20 @@
-class_name World
+class_name Overworld
 extends Node2D
 
 @export_range(10, 500) var step_size: int = 32
 @export_range(0.5, 5) var default_move_speed: float = 1.6
 
-var actors: Array[Actor] = []
+var actors: Array[OWActor] = []
 
 class MovingActor:
-	var actor: Actor
+	var actor: OWActor
 	var start_pos: Vector2
 	var direction: Vector2
 	var speed: float
 
 var moving_actors: Array[MovingActor] = []
 
-func add_actor(actor: Actor):
+func add_actor(actor: OWActor):
 	if not actors.has(actor):
 		# Moving the actor to its closest place on the grid
 		var step_size_factor: Vector2 = actor.position / step_size
@@ -22,7 +22,7 @@ func add_actor(actor: Actor):
 		actor.position = closest_mult_of_step_size * step_size
 		actors.append(actor)
 
-func remove_actor(actor: Actor):
+func remove_actor(actor: OWActor):
 	if actor.has(actor):
 		actors.erase(actor)
 
@@ -35,8 +35,10 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	for actor in actors:
-		if actor.move_direction == Actor.MoveDirection.NONE:
+		if actor.move_direction == OWActor.MoveDirection.NONE:
 			continue
+
+
 
 		_move_actor(actor)
 
@@ -47,11 +49,11 @@ func _process(delta):
 
 		var covered_dist := travelled.length()
 		var step_dist: float = step_size * delta * ma.speed
-		print(step_dist)
 		var delta_dist := step_dist
 		if covered_dist + step_dist >= step_size:
 			delta_dist = step_size - covered_dist
-			ma.actor.move_direction = Actor.MoveDirection.NONE
+			ma.actor.move_direction = OWActor.MoveDirection.NONE
+
 			to_remove.append(i)
 
 		ma.actor.position += delta_dist * ma.direction
@@ -59,20 +61,20 @@ func _process(delta):
 	for i in to_remove:
 		moving_actors.remove_at(i)
 
-func _move_actor(actor: Actor) -> void:
+func _move_actor(actor: OWActor) -> void:
 	for ma in moving_actors:
 		if ma.actor == actor:
 			return
 
 	var direction := Vector2()
 	match actor.move_direction:
-		Actor.MoveDirection.UP:
+		OWActor.MoveDirection.UP:
 			direction = Vector2.UP
-		Actor.MoveDirection.DOWN:
+		OWActor.MoveDirection.DOWN:
 			direction = Vector2.DOWN
-		Actor.MoveDirection.LEFT:
+		OWActor.MoveDirection.LEFT:
 			direction = Vector2.LEFT
-		Actor.MoveDirection.RIGHT:
+		OWActor.MoveDirection.RIGHT:
 			direction = Vector2.RIGHT
 
 	var moving_actor := MovingActor.new()

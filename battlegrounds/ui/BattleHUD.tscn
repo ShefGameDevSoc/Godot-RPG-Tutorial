@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://xgmiul02cisf"]
 
-[ext_resource type="Script" path="res://battle_hud.gd" id="1_0t4ao"]
+[ext_resource type="Script" path="res://scripts/battleground/ui/battle_hud.gd" id="1_0t4ao"]
 
 [node name="BattleHUD" type="MarginContainer" node_paths=PackedStringArray("attack_button", "skip_button", "action_list")]
 anchors_preset = 12

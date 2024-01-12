@@ -1,7 +1,9 @@
-class_name Actor
+class_name OWActor
 extends Node2D
 
 enum MoveDirection { NONE, UP, DOWN, LEFT, RIGHT }
+
+@export var is_blocking := true
 
 var move_direction := MoveDirection.NONE
 

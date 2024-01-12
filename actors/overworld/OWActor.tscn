@@ -1,9 +1,9 @@
 [gd_scene load_steps=3 format=3 uid="uid://dyh1xjvhvnlww"]
 
-[ext_resource type="Script" path="res://scripts/actor.gd" id="1_ci30c"]
+[ext_resource type="Script" path="res://scripts/overworld/ow_actor.gd" id="1_ci30c"]
 [ext_resource type="Texture2D" uid="uid://dwm6ut8g3h76y" path="res://icon.svg" id="2_noi2v"]
 
-[node name="Actor" type="Node2D"]
+[node name="OWActor" type="Node2D"]
 script = ExtResource("1_ci30c")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
