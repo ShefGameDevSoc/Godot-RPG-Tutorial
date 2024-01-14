@@ -16,18 +16,28 @@ const ps_action_entry := preload("res://battlegrounds/ui/ActionEntry.tscn")
 var _selected_action: Action = null
 var _target: BGActor = null
 
-var _targetable_actors: Array[BGActor]
+var _me: BGActor
+var _allies: Array[BGActor]
+var _opponents: Array[BGActor]
 
-func open_hud(me: BGActor, targetable_actors: Array[BGActor]) -> void:
+func open_hud(me: BGActor, allies: Array[BGActor], opponents: Array[BGActor]) -> void:
 	_show()
-	_targetable_actors = targetable_actors
-	for rpg_actor in _targetable_actors:
+	_me = me
+	_allies = allies
+	_opponents = opponents
+	for rpg_actor in [ _me ] + _allies + _opponents:
 		rpg_actor.body_selected.connect(self._on_rpg_actor_body_selected)
 
 func close_hud() -> void:
 	_hide()
-	for rpg_actor in _targetable_actors:
+	for rpg_actor in [ _me ] + _allies + _opponents:
 		rpg_actor.body_selected.disconnect(self._on_rpg_actor_body_selected)
+	_me = null
+	_allies = []
+	_opponents = []
+
+	_selected_action = null
+	_target = null
 
 func _ready() -> void:
 	_hide()
@@ -49,6 +59,10 @@ func _on_ac_skip_pressed():
 	close_hud()
 
 func _on_action_entry_selected(action: Action) -> void:
+	if action.targets == Action.Target.SELF:
+		_submit_action(action, _me)
+		return
+
 	_selected_action = action
 	view_main.hide()
 	view_command_list.hide()
@@ -82,8 +96,25 @@ func _on_select_target_back_pressed():
 	view_select_target.hide()
 
 func _submit_action(action: Action, target: BGActor) -> void:
+	match action.targets:
+		Action.Target.ALLIES:
+			if not target in _allies:
+				return
+		Action.Target.OPPONENTS:
+			if not target in _opponents:
+				return
+		Action.Target.SELF:
+			if target != _me:
+				return
+		Action.Target.NOT_SELF:
+			if target == _me:
+				return
+
 	action_selected.emit(target, action)
 	close_hud()
 
 func _on_rpg_actor_body_selected(actor: BGActor) -> void:
+	if not _selected_action:
+		return
+
 	_submit_action(_selected_action, actor)

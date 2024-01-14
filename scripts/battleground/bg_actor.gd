@@ -1,7 +1,7 @@
 class_name BGActor
 extends CharacterBody2D
 
-signal action_selection_started(me, targetable_actors)
+signal action_selection_started(me, allies, oppnents)
 
 signal body_selected(rpg_actor)
 
@@ -13,16 +13,15 @@ var character: Character
 
 var selector = null
 
-func make_choice(all_actors: Array[BGActor]) -> Array:
+func make_choice(in_allies: Array[BGActor], in_opponents: Array[BGActor]) -> Array:
 	# Filter out untargetable actors
-	var actors: Array[BGActor] = []
-	for rpga in all_actors:
-		if rpga == self:
-			continue
+	var is_targetable := func (actor: BGActor):
+		return actor != self
 
-		actors.append(rpga)
+	var allies := in_allies.filter(is_targetable)
+	var opponents := in_opponents.filter(is_targetable)
 
-	action_selection_started.emit(self, actors)
+	action_selection_started.emit(self, allies, opponents)
 	if selector == null:
 		print("%s's selector is unassigned" % name)
 		return []

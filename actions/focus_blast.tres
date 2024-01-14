@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_0qbej")
 name = "Foxus Miss"
+targets = 2
 power = 110
 cannot_miss = false
 accuracy = 70
