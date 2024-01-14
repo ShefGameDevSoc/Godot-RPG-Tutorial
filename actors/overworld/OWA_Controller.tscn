@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://di5ywf4qg7bsm"]
+
+[ext_resource type="PackedScene" uid="uid://dyh1xjvhvnlww" path="res://actors/overworld/OWActor.tscn" id="1_iupjm"]
+[ext_resource type="Script" path="res://scripts/overworld/ow_actor_keyboard_controls.gd" id="2_b33l8"]
+
+[node name="OWActor_Controlled" instance=ExtResource("1_iupjm")]
+
+[node name="KeyboardController" type="Node" parent="." index="1" node_paths=PackedStringArray("_actor")]
+script = ExtResource("2_b33l8")
+_actor = NodePath("..")

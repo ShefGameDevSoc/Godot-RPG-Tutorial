@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://be8eewm5x366x"]
+
+[ext_resource type="PackedScene" uid="uid://dyh1xjvhvnlww" path="res://actors/overworld/OWActor.tscn" id="1_xovjo"]
+[ext_resource type="Script" path="res://scripts/overworld/random_walker.gd" id="2_goicq"]
+
+[node name="OW_RandomWalker" instance=ExtResource("1_xovjo")]
+
+[node name="Sprite2D" parent="." index="0"]
+modulate = Color(1, 0.482353, 0.384314, 1)
+
+[node name="RandomWalker" type="Node" parent="." index="1" node_paths=PackedStringArray("_actor")]
+script = ExtResource("2_goicq")
+_actor = NodePath("..")
+move_timeout = 7.0
+
+[node name="Timer" type="Timer" parent="RandomWalker" index="0"]
+
+[connection signal="timeout" from="RandomWalker/Timer" to="RandomWalker" method="_on_timeout"]
