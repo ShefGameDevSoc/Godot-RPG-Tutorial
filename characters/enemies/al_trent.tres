@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ActionLibrary" load_steps=5 format=3 uid="uid://b2w73rvgeicdt"]
+
+[ext_resource type="Resource" uid="uid://cghp2ukp5owic" path="res://actions/punch.tres" id="1_ghqrv"]
+[ext_resource type="Resource" uid="uid://tqaxj6jviyb3" path="res://actions/personal_atttack.tres" id="2_a665k"]
+[ext_resource type="Resource" uid="uid://bqec2ubmw8c27" path="res://actions/focus_blast.tres" id="3_ewj0y"]
+[ext_resource type="Script" path="res://scripts/action/action_library.gd" id="4_udsdl"]
+
+[resource]
+script = ExtResource("4_udsdl")
+actions = Array[Resource("res://scripts/action/action.gd")]([ExtResource("1_ghqrv"), ExtResource("2_a665k"), ExtResource("3_ewj0y")])

@@ -1,6 +1,8 @@
 class_name Overworld
 extends Node2D
 
+@export var camera: Camera2D
+
 @export_range(0.5, 5) var move_speed: float = 1.6
 
 @export var tile_map_ground_layer := 1
@@ -56,7 +58,8 @@ func _process(delta: float) -> void:
 		var ma: MovingActor = moving_actors[i]
 		var travelled := ma.actor.position - ma.start_pos
 
-		var length_of_direction_of_travel: float = Vector2(abs(ma.direction) * Vector2(_tilemap.tile_set.tile_size)).length()
+		var length_of_direction_of_travel: float = Vector2(abs(ma.direction)
+												   * Vector2(_tilemap.tile_set.tile_size)).length()
 		var covered_dist := travelled.length()
 		var step_dist: float = length_of_direction_of_travel * delta * ma.speed
 		var delta_dist := step_dist
@@ -70,6 +73,11 @@ func _process(delta: float) -> void:
 		var ma: MovingActor = moving_actors[i]
 		ma.actor.move_direction = OWActor.MoveDirection.NONE
 		moving_actors.remove_at(i)
+
+		var coords: Vector2i = _tilemap.local_to_map(_tilemap.to_local(ma.actor.position))
+		if coords in occupied_cells:
+			for other: OWActor in occupied_cells[coords]:
+				other.other_entered_my_cell.emit(ma.actor)
 
 func _move_actor(actor: OWActor) -> void:
 	for ma in moving_actors:

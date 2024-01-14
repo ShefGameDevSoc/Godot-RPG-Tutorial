@@ -35,7 +35,7 @@ func close_hud() -> void:
 	_me = null
 	_allies = []
 	_opponents = []
-
+#
 	_selected_action = null
 	_target = null
 

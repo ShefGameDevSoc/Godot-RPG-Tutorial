@@ -1,3 +1,4 @@
+class_name BattleGround
 extends Node2D
 
 const ps_rpg_actor := preload("res://actors/battleground/BGActor.tscn")
@@ -13,9 +14,10 @@ class Team:
 
 var teams: Array[Team] = []
 
-func _ready() -> void:
+func startup_battle(players: Array[Character], enemies: Array[Character]) -> void:
+	teams = []
 	var team := Team.new()
-	for i in 1:
+	for char in players:
 		var actor: BGActor = ps_rpg_actor.instantiate()
 		team.actors.append(actor)
 		actor.position.x = -200
@@ -27,13 +29,13 @@ func _ready() -> void:
 		actor.selector = hud
 		actor.action_selection_started.connect(hud.open_hud)
 
-		actor.character = Character.new()
+		actor.character = char
 		actor.update_health()
 
 	teams.append(team)
 	team = Team.new()
 
-	for i in 1:
+	for char in enemies:
 		var actor: BGActor = ps_rpg_actor.instantiate()
 		team.actors.append(actor)
 		actor.position.x = 200
@@ -45,13 +47,17 @@ func _ready() -> void:
 		actor.selector = hud
 		actor.action_selection_started.connect(hud.open_hud)
 
-		actor.character = Character.new()
-		actor.character.health = 100
-		actor.character.max_health = 100
-		actor.character.defense = 40
+		actor.character = char
 		actor.update_health()
 
 	teams.append(team)
+	show()
+
+func end_battle() -> void:
+	hide()
+	teams = []
+	for c: Node in _actors.get_children() + _huds.get_children():
+		c.free()
 
 func _execute_turn() -> void:
 	in_turn = true

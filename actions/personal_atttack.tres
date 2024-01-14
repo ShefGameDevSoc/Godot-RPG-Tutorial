@@ -5,6 +5,11 @@
 [resource]
 script = ExtResource("1_qsjgl")
 name = "Personal Attack"
-power = 80
+targets = 4
+type = 0
 cannot_miss = true
 accuracy = 100
+power = 80
+heal_by_points = true
+health_points = 0
+heal_ratio = 0.0

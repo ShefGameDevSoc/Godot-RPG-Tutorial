@@ -1,11 +1,15 @@
-[gd_scene load_steps=11 format=3 uid="uid://d3ygvtjy6r58d"]
+[gd_scene load_steps=15 format=3 uid="uid://d3ygvtjy6r58d"]
 
 [ext_resource type="Script" path="res://scripts/overworld/overworld.gd" id="1_louqa"]
 [ext_resource type="Texture2D" uid="uid://8ndc5a7ar7el" path="res://overworlds/grassy_castle/ts_grass.png" id="4_3mide"]
-[ext_resource type="PackedScene" path="res://actors/overworld/OWA_RandomWalker.tscn" id="5_8joc7"]
+[ext_resource type="PackedScene" uid="uid://bwq7dvs4k5rrp" path="res://actors/overworld/OWA_RandomWalker.tscn" id="5_8joc7"]
 [ext_resource type="PackedScene" path="res://actors/overworld/OWA_Controller.tscn" id="5_b5okb"]
 [ext_resource type="Texture2D" uid="uid://rkvqe0a7ovml" path="res://overworlds/grassy_castle/ts_wall.png" id="5_r22en"]
+[ext_resource type="Script" path="res://scripts/overworld/battle_trigger.gd" id="6_j77aq"]
 [ext_resource type="Texture2D" uid="uid://bfmb0vbxtdbic" path="res://overworlds/grassy_castle/ts_stone_ground.png" id="6_ujxvx"]
+[ext_resource type="Resource" uid="uid://brq4yvkds08vu" path="res://characters/enemies/al_goblin.tres" id="7_v6jw2"]
+[ext_resource type="Resource" uid="uid://b2w73rvgeicdt" path="res://characters/enemies/al_trent.tres" id="8_5xw27"]
+[ext_resource type="Resource" uid="uid://p238xq6rpmvp" path="res://characters/enemies/al_ogre.tres" id="9_e2ivo"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kwn3y"]
 resource_name = "grass"
@@ -269,8 +273,9 @@ sources/0 = SubResource("TileSetAtlasSource_kwn3y")
 sources/1 = SubResource("TileSetAtlasSource_necir")
 sources/2 = SubResource("TileSetAtlasSource_nlt76")
 
-[node name="OWColourGrid" type="Node2D" node_paths=PackedStringArray("_tilemap") groups=["world"]]
+[node name="OW_GrassyCastle" type="Node2D" node_paths=PackedStringArray("camera", "_tilemap") groups=["world"]]
 script = ExtResource("1_louqa")
+camera = NodePath("OWActor_Controlled/Camera2D")
 _tilemap = NodePath("TileMap")
 
 [node name="TileMap" type="TileMap" parent="."]
@@ -285,7 +290,13 @@ layer_1/tile_data = PackedInt32Array(0, 0, 0, 65537, 131072, 1, 131073, 0, 0, 13
 position = Vector2(90, 0)
 is_blocking = false
 
-[node name="OWActor_Controlled" parent="." instance=ExtResource("5_b5okb")]
+[node name="BattleTrigger" type="Node" parent="OW_RandomWalker"]
+script = ExtResource("6_j77aq")
+_potential_enemies = Array[Resource("res://scripts/action/action_library.gd")]([ExtResource("7_v6jw2"), ExtResource("8_5xw27"), ExtResource("9_e2ivo")])
+
+[node name="OWActor_Controlled" parent="." groups=["player"] instance=ExtResource("5_b5okb")]
 
 [node name="Camera2D" type="Camera2D" parent="OWActor_Controlled"]
 zoom = Vector2(1.5, 1.5)
+
+[connection signal="other_entered_my_cell" from="OW_RandomWalker" to="OW_RandomWalker/BattleTrigger" method="_on_ow_random_walker_other_entered_my_cell"]

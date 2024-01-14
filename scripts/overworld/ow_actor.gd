@@ -2,6 +2,7 @@ class_name OWActor
 extends Node2D
 
 signal bumped_into_unwalkable(direction)
+signal other_entered_my_cell(other_actor)
 
 enum MoveDirection { NONE, UP, DOWN, LEFT, RIGHT }
 

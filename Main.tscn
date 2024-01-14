@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://b64m1pg0lawpb"]
+
+[ext_resource type="PackedScene" uid="uid://d3ygvtjy6r58d" path="res://overworlds/OW_GrassyCastle.tscn" id="1_dngyd"]
+[ext_resource type="PackedScene" uid="uid://blrf7dhnix177" path="res://battlegrounds/BGNormal.tscn" id="2_0qmud"]
+
+[node name="Main" type="Node"]
+
+[node name="OW_GrassyCastle" parent="." instance=ExtResource("1_dngyd")]
+
+[node name="BattleGround" parent="." instance=ExtResource("2_0qmud")]
+visible = false

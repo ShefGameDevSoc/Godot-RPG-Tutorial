@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://be8eewm5x366x"]
+[gd_scene load_steps=3 format=3 uid="uid://bwq7dvs4k5rrp"]
 
 [ext_resource type="PackedScene" uid="uid://dyh1xjvhvnlww" path="res://actors/overworld/OWActor.tscn" id="1_xovjo"]
 [ext_resource type="Script" path="res://scripts/overworld/random_walker.gd" id="2_goicq"]

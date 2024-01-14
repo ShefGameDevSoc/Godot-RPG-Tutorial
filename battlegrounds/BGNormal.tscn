@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/battleground/battleground.gd" id="1_vqgrq"]
 [ext_resource type="Texture2D" uid="uid://cqwegsjt67ss5" path="res://colour_grid.png" id="2_b7u1t"]
 
-[node name="BattleGround" type="Node2D"]
+[node name="BG_Normal" type="Node2D" groups=["battleground"]]
 script = ExtResource("1_vqgrq")
 
 [node name="BKG" type="Sprite2D" parent="."]
