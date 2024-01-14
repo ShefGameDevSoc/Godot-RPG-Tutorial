@@ -57,7 +57,8 @@ func end_battle() -> void:
 	hide()
 	teams = []
 	for c: Node in _actors.get_children() + _huds.get_children():
-		c.free()
+		c.queue_free()
+	Game.enter_overworld()
 
 func _execute_turn() -> void:
 	in_turn = true
@@ -117,6 +118,7 @@ func apply_action(user: BGActor, target: BGActor, action: Action) -> void:
 			target.update_health()
 			if target.character.health <= 0:
 				print("%s has died" % target.name)
+				_check_for_battle_end()
 
 		Action.Type.HEALING:
 			var heal_points_from_ratio := int(target.character.max_health * action.heal_ratio)
@@ -125,3 +127,12 @@ func apply_action(user: BGActor, target: BGActor, action: Action) -> void:
 			target.character.health = min(target.character.max_health,
 										  target.character.health + to_heal)
 			target.update_health()
+
+func _check_for_battle_end() -> void:
+	var is_dead := func (actor: BGActor) -> bool:
+		return actor.character.health <= 0
+
+	for team: Team in teams:
+		if team.actors.all(is_dead):
+			end_battle()
+			break

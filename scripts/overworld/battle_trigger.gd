@@ -26,5 +26,5 @@ func _on_ow_random_walker_other_entered_my_cell(other_actor: OWActor) -> void:
 
 		enemies.append(char)
 
-	print(len(enemies))
 	Game.enter_battle(enemies)
+	get_parent().queue_free()
