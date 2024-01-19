@@ -1,14 +1,15 @@
 class_name BattleHUD
 extends Control
 
-signal action_selected(target, action)
-
 const ps_action_entry := preload("res://battlegrounds/ui/ActionEntry.tscn")
+
+@onready var selector := $Selector
 
 @export var attack_button: Button
 @export var skip_button: Button
 @export var action_list: Control
 
+@onready var display_name := $UI/CharacterName
 @onready var view_main := $UI/Menus/Main
 @onready var view_command_list := $UI/Menus/CommandList
 @onready var view_select_target := $UI/Menus/SelectTarget
@@ -22,6 +23,7 @@ var _opponents: Array[BGActor]
 
 func open_hud(me: BGActor, allies: Array[BGActor], opponents: Array[BGActor]) -> void:
 	_show()
+	display_name.text = me.name
 	_me = me
 	_allies = allies
 	_opponents = opponents
@@ -55,7 +57,7 @@ func _on_ac_attack_pressed():
 	view_select_target.hide()
 
 func _on_ac_skip_pressed():
-	action_selected.emit()
+	selector.action_selected.emit()
 	close_hud()
 
 func _on_action_entry_selected(action: Action) -> void:
@@ -110,7 +112,7 @@ func _submit_action(action: Action, target: BGActor) -> void:
 			if target == _me:
 				return
 
-	action_selected.emit(target, action)
+	selector.action_selected.emit(target, action)
 	close_hud()
 
 func _on_rpg_actor_body_selected(actor: BGActor) -> void:

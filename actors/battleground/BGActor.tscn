@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://b1uej8141ci00"]
+[gd_scene load_steps=5 format=3 uid="uid://b1uej8141ci00"]
 
 [ext_resource type="Script" path="res://scripts/battleground/bg_actor.gd" id="1_8risv"]
-[ext_resource type="Resource" uid="uid://ba0onq0amvcdi" path="res://actions/player_actions.tres" id="2_7jg41"]
 [ext_resource type="Texture2D" uid="uid://dwm6ut8g3h76y" path="res://icon.svg" id="3_jc7em"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2xma7"]
@@ -13,7 +12,6 @@ bg_color = Color(0.0901961, 0.862745, 0.305882, 1)
 [node name="BGActor" type="CharacterBody2D"]
 input_pickable = true
 script = ExtResource("1_8risv")
-library = ExtResource("2_7jg41")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("3_jc7em")

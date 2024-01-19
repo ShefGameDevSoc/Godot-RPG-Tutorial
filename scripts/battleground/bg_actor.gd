@@ -7,11 +7,9 @@ signal body_selected(rpg_actor)
 
 var character: Character
 
-@export var library: ActionLibrary
-
 @onready var _health_bar: ProgressBar = $HealthBar
 
-var selector = null
+var selector: SelectorInterface = null
 
 func make_choice(in_allies: Array[BGActor], in_opponents: Array[BGActor]) -> Array:
 	# Filter out untargetable actors
@@ -21,10 +19,8 @@ func make_choice(in_allies: Array[BGActor], in_opponents: Array[BGActor]) -> Arr
 	var allies := in_allies.filter(is_targetable)
 	var opponents := in_opponents.filter(is_targetable)
 
-	action_selection_started.emit(self, allies, opponents)
-	if selector == null:
-		print("%s's selector is unassigned" % name)
-		return []
+	selector.action_selection_started.emit(self, allies, opponents)
+	#action_selection_started.emit(self, allies, opponents)
 	# Array
 	var res = await selector.action_selected
 	return [] if res == null else res

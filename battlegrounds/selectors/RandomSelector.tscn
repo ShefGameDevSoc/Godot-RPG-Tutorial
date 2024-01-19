@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://daau06ihautff"]
+
+[ext_resource type="Script" path="res://scripts/battleground/random_selector.gd" id="1_52af0"]
+[ext_resource type="Script" path="res://scripts/battleground/selector_interface.gd" id="2_es68n"]
+
+[node name="RandomSelector" type="Node"]
+script = ExtResource("1_52af0")
+
+[node name="Selector" type="Node" parent="."]
+script = ExtResource("2_es68n")
+
+[node name="ThinkTimer" type="Timer" parent="."]
+wait_time = 1.4
+
+[connection signal="action_selection_started" from="Selector" to="." method="_on_action_selection_started"]
+[connection signal="timeout" from="ThinkTimer" to="." method="_on_think_timer_timeout"]

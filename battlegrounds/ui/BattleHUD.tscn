@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://xgmiul02cisf"]
+[gd_scene load_steps=3 format=3 uid="uid://xgmiul02cisf"]
 
 [ext_resource type="Script" path="res://scripts/battleground/ui/battle_hud.gd" id="1_0t4ao"]
+[ext_resource type="Script" path="res://scripts/battleground/selector_interface.gd" id="2_ccc62"]
 
 [node name="BattleHUD" type="MarginContainer" node_paths=PackedStringArray("attack_button", "skip_button", "action_list")]
 anchors_preset = 12
@@ -110,7 +111,11 @@ grow_vertical = 0
 text = "Back"
 alignment = 0
 
+[node name="Selector" type="Node" parent="."]
+script = ExtResource("2_ccc62")
+
 [connection signal="pressed" from="UI/Menus/Main/Attack/Ac_Attack" to="." method="_on_ac_attack_pressed"]
 [connection signal="pressed" from="UI/Menus/Main/Skip/Ac_Skip" to="." method="_on_ac_skip_pressed"]
 [connection signal="pressed" from="UI/Menus/CommandList/CenterContainer/CLBackButton" to="." method="_on_command_list_back_button_pressed"]
 [connection signal="pressed" from="UI/Menus/SelectTarget/Button" to="." method="_on_select_target_back_pressed"]
+[connection signal="action_selection_started" from="Selector" to="." method="open_hud"]

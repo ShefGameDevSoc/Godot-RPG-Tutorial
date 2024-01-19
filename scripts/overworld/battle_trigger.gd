@@ -15,7 +15,7 @@ func _on_ow_random_walker_other_entered_my_cell(other_actor: OWActor) -> void:
 	for i in range(min(num_enemies, _max_num_enemies)):
 		var char := Character.new()
 		char.action_library = _potential_enemies[rng.randi() % len(_potential_enemies)]
-		char.max_health = rng.randf_range(40, 300)
+		char.max_health = rng.randi_range(40, 300)
 		char.attack = rng.randi_range(30, 60)
 		char.defense = rng.randi_range(20, 60)
 		
@@ -27,4 +27,6 @@ func _on_ow_random_walker_other_entered_my_cell(other_actor: OWActor) -> void:
 		enemies.append(char)
 
 	Game.enter_battle(enemies)
+	if Game.world != null:
+		Game.world.remove_actor(get_parent())
 	get_parent().queue_free()

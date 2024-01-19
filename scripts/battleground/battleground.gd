@@ -3,6 +3,7 @@ extends Node2D
 
 const ps_rpg_actor := preload("res://actors/battleground/BGActor.tscn")
 const ps_selection_hud := preload("res://battlegrounds/ui/BattleHUD.tscn")
+const ps_random_selector := preload("res://battlegrounds/selectors/RandomSelector.tscn")
 
 @onready var _actors := $Actors
 @onready var _huds := $HUDs
@@ -22,12 +23,11 @@ func startup_battle(players: Array[Character], enemies: Array[Character]) -> voi
 		team.actors.append(actor)
 		actor.position.x = -200
 		var hud: BattleHUD = ps_selection_hud.instantiate()
-		hud.populate_action_list(actor.library)
+		hud.populate_action_list(char.action_library)
 		_actors.add_child(actor)
 		_huds.add_child(hud)
 
-		actor.selector = hud
-		actor.action_selection_started.connect(hud.open_hud)
+		actor.selector = hud.selector
 
 		actor.character = char
 		actor.update_health()
@@ -39,13 +39,11 @@ func startup_battle(players: Array[Character], enemies: Array[Character]) -> voi
 		var actor: BGActor = ps_rpg_actor.instantiate()
 		team.actors.append(actor)
 		actor.position.x = 200
-		var hud: BattleHUD = ps_selection_hud.instantiate()
-		hud.populate_action_list(actor.library)
+		var rs: RandomSelector = ps_random_selector.instantiate()
 		_actors.add_child(actor)
-		_huds.add_child(hud)
+		_huds.add_child(rs)
 
-		actor.selector = hud
-		actor.action_selection_started.connect(hud.open_hud)
+		actor.selector = rs.selector
 
 		actor.character = char
 		actor.update_health()

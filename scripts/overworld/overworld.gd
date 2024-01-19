@@ -38,7 +38,7 @@ func add_actor(actor: OWActor):
 			occupied_cells[actor_coords] = [ actor ]
 
 func remove_actor(actor: OWActor):
-	if actor.has(actor):
+	if actors.has(actor):
 		actors.erase(actor)
 
 # Called when the node enters the scene tree for the first time.

@@ -15,6 +15,7 @@ func _ready() -> void:
 		battleground = battlegrounds[0]
 
 	var char := Character.new()
+	char.action_library = preload("res://characters/player/player_actions.tres")
 	player = [ char ]
 
 func enter_battle(enemies: Array[Character]) -> void:
