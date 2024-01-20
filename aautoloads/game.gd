@@ -3,8 +3,6 @@ extends Node
 var world: Overworld = null
 var battleground: BattleGround = null
 
-var player: Array[Character]
-
 func _ready() -> void:
 	var worlds := get_tree().get_nodes_in_group("world")
 	if len(worlds) > 0:
@@ -14,18 +12,13 @@ func _ready() -> void:
 	if len(battlegrounds) > 0:
 		battleground = battlegrounds[0]
 
-	var char := Character.new()
-	char.action_library = preload("res://characters/player/player_actions.tres")
-	player = [ char ]
-
-func enter_battle(enemies: Array[Character]) -> void:
+func enter_battle(players: Array[Character], enemies: Array[Character]) -> void:
 	if not battleground:
 		return
 
 	world.process_mode = Node.PROCESS_MODE_DISABLED
-	world.camera.enabled = false
-	battleground.startup_battle(player, enemies)
+	battleground.startup_battle(players, enemies)
 
 func enter_overworld() -> void:
 	world.process_mode = Node.PROCESS_MODE_INHERIT
-	world.camera.enabled = true
+	world.enter()

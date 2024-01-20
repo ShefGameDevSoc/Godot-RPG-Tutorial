@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Action" load_steps=2 format=3 uid="uid://dhxceggj48s8c"]
+
+[ext_resource type="Script" path="res://scripts/action/action.gd" id="1_bmon2"]
+
+[resource]
+script = ExtResource("1_bmon2")
+name = "Explosion"
+targets = 3
+type = 0
+cannot_miss = false
+accuracy = 100
+power = 200
+heal_by_points = true
+health_points = 0
+heal_ratio = 0.0

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CharacterDefinition" load_steps=4 format=3 uid="uid://c2g2dwadlg0ro"]
+
+[ext_resource type="Script" path="res://scripts/character/character_definition.gd" id="1_4uyi2"]
+[ext_resource type="Resource" uid="uid://bw2l2w7x7qhk3" path="res://actions/tackle.tres" id="1_t5y7x"]
+[ext_resource type="Resource" uid="uid://brpil1gjny7u0" path="res://actions/self_heal.tres" id="2_o8m4r"]
+
+[resource]
+script = ExtResource("1_4uyi2")
+_name = "Ogre"
+_actions = Array[Resource("res://scripts/action/action.gd")]([ExtResource("1_t5y7x"), ExtResource("2_o8m4r")])
+_health = 160
+_health_vicinity = 10
+_attack = 58
+_attack_vicinity = 70
+_defense = 130
+_defense_vicinity = 14
+_speed = 58
+_speed_vicinity = 60

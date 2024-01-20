@@ -23,14 +23,14 @@ func startup_battle(players: Array[Character], enemies: Array[Character]) -> voi
 		team.actors.append(actor)
 		actor.position.x = -200
 		var hud: BattleHUD = ps_selection_hud.instantiate()
-		hud.populate_action_list(char.action_library)
+		hud.populate_action_list(char)
 		_actors.add_child(actor)
 		_huds.add_child(hud)
 
 		actor.selector = hud.selector
 
 		actor.character = char
-		actor.update_health()
+		actor.update_character_ui()
 
 	teams.append(team)
 	team = Team.new()
@@ -46,12 +46,16 @@ func startup_battle(players: Array[Character], enemies: Array[Character]) -> voi
 		actor.selector = rs.selector
 
 		actor.character = char
-		actor.update_health()
+		actor.update_character_ui()
 
 	teams.append(team)
 	show()
 
-func end_battle() -> void:
+func end_battle(loser: Team) -> void:
+	for actor in loser.actors:
+		if actor.is_in_group("player"):
+			get_tree().quit()
+
 	hide()
 	teams = []
 	for c: Node in _actors.get_children() + _huds.get_children():
@@ -68,7 +72,7 @@ func _execute_turn() -> void:
 			speed_sorted.append(rpga as BGActor)
 
 	for rpga in speed_sorted:
-		print(rpga.name)
+		print("%s 's turn" % rpga.character.name)
 		var my_team: Team = null
 		for team: Team in teams:
 			if rpga in team.actors:
@@ -111,7 +115,7 @@ func apply_action(user: BGActor, target: BGActor, action: Action) -> void:
 			# https://bulbapedia.bulbagarden.net/wiki/Damage
 			var damage := int(action.power * user.character.attack
 						  / target.character.defense * (1.0 - randf() * 0.2))
-			print("Dealing %d damage to %s" % [ damage, target.name ])
+			print("Dealing %d damage to %s" % [ damage, target.character.name ])
 			target.character.health = max(0, target.character.health - damage)
 			target.update_health()
 			if target.character.health <= 0:
@@ -121,7 +125,7 @@ func apply_action(user: BGActor, target: BGActor, action: Action) -> void:
 		Action.Type.HEALING:
 			var heal_points_from_ratio := int(target.character.max_health * action.heal_ratio)
 			var to_heal: int = action.health_points if action.health_points else heal_points_from_ratio
-			print("Healing %s by %s" % [ target.name, to_heal ])
+			print("Healing %s by %s" % [ target.character.name, to_heal ])
 			target.character.health = min(target.character.max_health,
 										  target.character.health + to_heal)
 			target.update_health()
@@ -132,5 +136,5 @@ func _check_for_battle_end() -> void:
 
 	for team: Team in teams:
 		if team.actors.all(is_dead):
-			end_battle()
+			end_battle(team)
 			break

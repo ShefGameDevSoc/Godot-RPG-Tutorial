@@ -17,4 +17,4 @@ enum Type { ATTACK, HEALING }
 @export_group("Heal")
 @export var heal_by_points := true
 @export var health_points: int
-@export_range(0.0, 100.0) var heal_ratio: float
+@export_range(0.0, 1.0) var heal_ratio: float

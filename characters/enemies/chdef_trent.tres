@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="CharacterDefinition" load_steps=5 format=3 uid="uid://mn4u1hkrjrql"]
+
+[ext_resource type="Script" path="res://scripts/character/character_definition.gd" id="1_6rdgo"]
+[ext_resource type="Resource" uid="uid://cghp2ukp5owic" path="res://actions/punch.tres" id="1_nnlo1"]
+[ext_resource type="Resource" uid="uid://vhcnwn6mp51y" path="res://actions/healing_sap.tres" id="2_hwngm"]
+[ext_resource type="Resource" uid="uid://brpil1gjny7u0" path="res://actions/self_heal.tres" id="3_bu4du"]
+
+[resource]
+script = ExtResource("1_6rdgo")
+_name = "Trent"
+_actions = Array[Resource("res://scripts/action/action.gd")]([ExtResource("1_nnlo1"), ExtResource("2_hwngm"), ExtResource("3_bu4du")])
+_health = 200
+_health_vicinity = 30
+_attack = 48
+_attack_vicinity = 10
+_defense = 50
+_defense_vicinity = 14
+_speed = 82
+_speed_vicinity = 20

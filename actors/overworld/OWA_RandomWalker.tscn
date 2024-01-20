@@ -12,6 +12,7 @@ modulate = Color(1, 0.482353, 0.384314, 1)
 script = ExtResource("2_goicq")
 _actor = NodePath("..")
 move_timeout = 7.0
+move_timeout_vicinity = 4.0
 
 [node name="Timer" type="Timer" parent="RandomWalker" index="0"]
 

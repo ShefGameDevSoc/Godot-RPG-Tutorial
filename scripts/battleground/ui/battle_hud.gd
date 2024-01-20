@@ -44,8 +44,8 @@ func close_hud() -> void:
 func _ready() -> void:
 	_hide()
 
-func populate_action_list(lib: ActionLibrary) -> void:
-	for action in lib.actions:
+func populate_action_list(character: Character) -> void:
+	for action in character.actions:
 		var entry: ActionEntry = ps_action_entry.instantiate()
 		entry.fill(action)
 		action_list.add_child(entry)

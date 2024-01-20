@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://di5ywf4qg7bsm"]
+[gd_scene load_steps=3 format=3 uid="uid://h2722y1m6y4g"]
 
 [ext_resource type="PackedScene" uid="uid://dyh1xjvhvnlww" path="res://actors/overworld/OWActor.tscn" id="1_iupjm"]
 [ext_resource type="Script" path="res://scripts/overworld/ow_actor_keyboard_controls.gd" id="2_b33l8"]

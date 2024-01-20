@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://gamjueujxpb5"]
+
+[ext_resource type="PackedScene" uid="uid://h2722y1m6y4g" path="res://actors/overworld/OWA_Controller.tscn" id="1_dvlvo"]
+[ext_resource type="Script" path="res://scripts/kill_on_death.gd" id="2_jokkj"]
+
+[node name="Player" instance=ExtResource("1_dvlvo")]
+move_speed_multiplier = 3.0
+
+[node name="GameEnd" type="Node" parent="." index="2"]
+script = ExtResource("2_jokkj")
+
+[connection signal="actor_died" from="." to="GameEnd" method="_on_actor_died"]
