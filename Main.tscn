@@ -3,25 +3,26 @@
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_d4th8"]
 [ext_resource type="PackedScene" uid="uid://d3ygvtjy6r58d" path="res://overworlds/OW_GrassyCastle.tscn" id="1_dngyd"]
 [ext_resource type="PackedScene" uid="uid://blrf7dhnix177" path="res://battlegrounds/BGNormal.tscn" id="2_0qmud"]
-[ext_resource type="PackedScene" uid="uid://bwq7dvs4k5rrp" path="res://actors/overworld/OWA_RandomWalker.tscn" id="2_7vntm"]
 [ext_resource type="PackedScene" uid="uid://gamjueujxpb5" path="res://actors/overworld/OWA_Player.tscn" id="2_mureu"]
+[ext_resource type="PackedScene" uid="uid://ww3lqkm2xdh6" path="res://actors/overworld/OW_Enemy.tscn" id="3_32leg"]
 [ext_resource type="Resource" uid="uid://bh5fcoim7kqbx" path="res://characters/player/chdef_player.tres" id="4_kce4w"]
 [ext_resource type="Resource" uid="uid://c3mkifxxsotuv" path="res://characters/enemies/chdef_goblin.tres" id="5_588h7"]
 [ext_resource type="Resource" uid="uid://c2g2dwadlg0ro" path="res://characters/enemies/chdef_ogre.tres" id="6_hq1yt"]
 [ext_resource type="Resource" uid="uid://mn4u1hkrjrql" path="res://characters/enemies/chdef_trent.tres" id="7_ylvk2"]
 
-[node name="Main" type="Node" node_paths=PackedStringArray("_overworld", "_overworld_camera")]
+[node name="Main" type="Node" node_paths=PackedStringArray("_overworld", "_overworld_camera", "_battleground")]
 script = ExtResource("1_d4th8")
 _overworld = NodePath("OW_GrassyCastle")
 _overworld_camera = NodePath("OW_GrassyCastle/Camera2D")
+_battleground = NodePath("BattleGround")
 _player_actor = ExtResource("2_mureu")
-_roaming_enemies = Array[PackedScene]([ExtResource("2_7vntm")])
+_roaming_enemies = Array[PackedScene]([ExtResource("3_32leg")])
 _player_def = ExtResource("4_kce4w")
 _enemy_defs = Array[Resource("res://scripts/character/character_definition.gd")]([ExtResource("5_588h7"), ExtResource("6_hq1yt"), ExtResource("7_ylvk2"), ExtResource("5_588h7")])
 
 [node name="OW_GrassyCastle" parent="." instance=ExtResource("1_dngyd")]
 
-[node name="Camera2D" type="Camera2D" parent="OW_GrassyCastle"]
+[node name="Camera2D" type="Camera2D" parent="OW_GrassyCastle" groups=["cam_overworld"]]
 zoom = Vector2(1.5, 1.5)
 
 [node name="BattleGround" parent="." instance=ExtResource("2_0qmud")]

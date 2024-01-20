@@ -5,6 +5,8 @@ const scr_battle_trigger := preload("res://scripts/overworld/battle_trigger.gd")
 @export var _overworld: Overworld
 @export var _overworld_camera: Camera2D
 
+@export var _battleground: BattleGround
+
 @export var _player_actor: PackedScene
 @export var _roaming_enemies: Array[PackedScene]
 
@@ -12,6 +14,8 @@ const scr_battle_trigger := preload("res://scripts/overworld/battle_trigger.gd")
 @export var _enemy_defs: Array[CharacterDefinition]
 
 func _ready() -> void:
+	Game.switch_to_overworld_cameras()
+
 	var rng := RandomNumberGenerator.new()
 	rng.randomize()
 

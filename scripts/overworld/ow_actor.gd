@@ -19,7 +19,9 @@ func _ready():
 		Game.world.add_actor(self)
 
 func check_if_alive() -> void:
+	print(name)
 	for c in characters:
+		print("\t%s %d" % [ c.name, c.health ])
 		if c.health > 0:
 			return
 

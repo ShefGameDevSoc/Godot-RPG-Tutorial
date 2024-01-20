@@ -18,7 +18,21 @@ func enter_battle(players: Array[Character], enemies: Array[Character]) -> void:
 
 	world.process_mode = Node.PROCESS_MODE_DISABLED
 	battleground.startup_battle(players, enemies)
+	switch_to_battleground_cameras()
 
 func enter_overworld() -> void:
 	world.process_mode = Node.PROCESS_MODE_INHERIT
 	world.enter()
+	switch_to_overworld_cameras()
+
+func switch_to_overworld_cameras() -> void:
+	for cam: Camera2D in get_tree().get_nodes_in_group("cam_overworld"):
+		cam.enabled = true
+	for cam: Camera2D in get_tree().get_nodes_in_group("cam_battleground"):
+		cam.enabled = false
+
+func switch_to_battleground_cameras() -> void:
+	for cam: Camera2D in get_tree().get_nodes_in_group("cam_overworld"):
+		cam.enabled = false
+	for cam: Camera2D in get_tree().get_nodes_in_group("cam_battleground"):
+		cam.enabled = true

@@ -20,7 +20,7 @@ extends Resource
 func create(rng: RandomNumberGenerator) -> Character:
 	var c := Character.new()
 	c.actions = _actions
-	c.name = String(_name)
+	c.name = String(_name) + str(rng.randi() % 1000)
 	c.max_health = _random_in_vicinity(rng, _health, _health_vicinity)
 	c.health = c.max_health
 	c.attack = _random_in_vicinity(rng, _attack, _attack_vicinity)

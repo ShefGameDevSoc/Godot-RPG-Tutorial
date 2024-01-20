@@ -11,5 +11,3 @@ func _on_ow_random_walker_other_entered_my_cell(other_actor: OWActor) -> void:
 
 	var owactor: OWActor = get_parent()
 	Game.enter_battle(other_actor.characters, owactor.characters)
-	if Game.world != null:
-		Game.world.remove_actor(get_parent())

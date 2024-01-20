@@ -9,7 +9,7 @@ script = ExtResource("1_vqgrq")
 [node name="BKG" type="Sprite2D" parent="."]
 texture = ExtResource("2_b7u1t")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." groups=["cam_battleground"]]
 
 [node name="Actors" type="Node" parent="."]
 

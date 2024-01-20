@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://ww3lqkm2xdh6"]
+
+[ext_resource type="PackedScene" uid="uid://bwq7dvs4k5rrp" path="res://actors/overworld/OWA_RandomWalker.tscn" id="1_68ijy"]
+[ext_resource type="Script" path="res://scripts/despawn_on_death.gd" id="2_mxkb4"]
+
+[node name="OW_Enemy" instance=ExtResource("1_68ijy")]
+
+[node name="Despawn" type="Node" parent="." index="2"]
+script = ExtResource("2_mxkb4")
+
+[connection signal="actor_died" from="." to="Despawn" method="_on_actor_died"]
