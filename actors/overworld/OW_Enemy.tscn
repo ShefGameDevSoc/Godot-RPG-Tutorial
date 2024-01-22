@@ -5,6 +5,10 @@
 
 [node name="OW_Enemy" instance=ExtResource("1_68ijy")]
 
+[node name="RandomWalker" parent="." index="1"]
+move_timeout = 3.686
+move_timeout_vicinity = 2.0
+
 [node name="Despawn" type="Node" parent="." index="2"]
 script = ExtResource("2_mxkb4")
 

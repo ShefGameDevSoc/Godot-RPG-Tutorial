@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b64m1pg0lawpb"]
+[gd_scene load_steps=11 format=3 uid="uid://b64m1pg0lawpb"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_d4th8"]
 [ext_resource type="PackedScene" uid="uid://d3ygvtjy6r58d" path="res://overworlds/OW_GrassyCastle.tscn" id="1_dngyd"]
@@ -9,12 +9,14 @@
 [ext_resource type="Resource" uid="uid://c3mkifxxsotuv" path="res://characters/enemies/chdef_goblin.tres" id="5_588h7"]
 [ext_resource type="Resource" uid="uid://c2g2dwadlg0ro" path="res://characters/enemies/chdef_ogre.tres" id="6_hq1yt"]
 [ext_resource type="Resource" uid="uid://mn4u1hkrjrql" path="res://characters/enemies/chdef_trent.tres" id="7_ylvk2"]
+[ext_resource type="PackedScene" uid="uid://dlw082hbvbs2x" path="res://overworlds/ui/Menu.tscn" id="10_rv624"]
 
-[node name="Main" type="Node" node_paths=PackedStringArray("_overworld", "_overworld_camera", "_battleground")]
+[node name="Main" type="Node" node_paths=PackedStringArray("_overworld", "_overworld_camera", "_battleground", "_menu")]
 script = ExtResource("1_d4th8")
 _overworld = NodePath("OW_GrassyCastle")
 _overworld_camera = NodePath("OW_GrassyCastle/Camera2D")
 _battleground = NodePath("BattleGround")
+_menu = NodePath("CanvasLayer/EscapeMenu")
 _player_actor = ExtResource("2_mureu")
 _roaming_enemies = Array[PackedScene]([ExtResource("3_32leg")])
 _player_def = ExtResource("4_kce4w")
@@ -27,3 +29,10 @@ zoom = Vector2(1.5, 1.5)
 
 [node name="BattleGround" parent="." instance=ExtResource("2_0qmud")]
 visible = false
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="EscapeMenu" parent="CanvasLayer" instance=ExtResource("10_rv624")]
+offset_left = 0.0
+offset_right = 240.0
+offset_bottom = 1560.0

@@ -1,0 +1,160 @@
+[gd_scene load_steps=6 format=3 uid="uid://dlw082hbvbs2x"]
+
+[ext_resource type="Script" path="res://scripts/overworld/ui/escape_menu.gd" id="1_mnbdi"]
+
+[sub_resource type="Animation" id="Animation_s48a2"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(780, -0.25, 0, 0.25, 0, 780, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.001)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.001)
+}
+
+[sub_resource type="Animation" id="Animation_yyc14"]
+resource_name = "hide"
+length = 0.4
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(540, -0.25, 0, 0.25, 0, 780, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.4)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.4)
+}
+
+[sub_resource type="Animation" id="Animation_6gev6"]
+resource_name = "show"
+length = 0.4
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(780, -0.25, 0, 0.25, 0, 540, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.4)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.4)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8fhet"]
+_data = {
+"RESET": SubResource("Animation_s48a2"),
+"hide": SubResource("Animation_yyc14"),
+"show": SubResource("Animation_6gev6")
+}
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 780.0
+offset_right = 1020.0
+offset_bottom = 1560.0
+grow_horizontal = 0
+grow_vertical = 2
+script = ExtResource("1_mnbdi")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.419608, 0.419608, 0.419608, 1)
+
+[node name="UI" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -240.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+
+[node name="UICont" type="Control" parent="UI"]
+layout_mode = 2
+
+[node name="ControlsCont" type="VBoxContainer" parent="UI/UICont"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BtnCreate" type="Button" parent="UI/UICont/ControlsCont"]
+layout_mode = 2
+text = "Create Lobby"
+
+[node name="Label" type="Label" parent="UI/UICont/ControlsCont"]
+layout_mode = 2
+text = "Enter Lobby IP:"
+horizontal_alignment = 1
+
+[node name="IPEnter" type="TextEdit" parent="UI/UICont/ControlsCont"]
+layout_mode = 2
+placeholder_text = "000.000.000.000"
+scroll_fit_content_height = true
+caret_blink = true
+
+[node name="BtnJoin" type="Button" parent="UI/UICont/ControlsCont"]
+layout_mode = 2
+text = "Join"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_8fhet")
+}
+
+[connection signal="pressed" from="UI/UICont/ControlsCont/BtnCreate" to="." method="_on_create_lobby"]
+[connection signal="pressed" from="UI/UICont/ControlsCont/BtnJoin" to="." method="_on_join_lobby"]

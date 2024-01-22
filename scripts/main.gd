@@ -7,14 +7,19 @@ const scr_battle_trigger := preload("res://scripts/overworld/battle_trigger.gd")
 
 @export var _battleground: BattleGround
 
+@export var _menu: Menu
+
 @export var _player_actor: PackedScene
 @export var _roaming_enemies: Array[PackedScene]
 
 @export var _player_def: CharacterDefinition
 @export var _enemy_defs: Array[CharacterDefinition]
 
+var _paused := false
+
 func _ready() -> void:
 	Game.switch_to_overworld_cameras()
+	Game.in_battle = false
 
 	var rng := RandomNumberGenerator.new()
 	rng.randomize()
@@ -59,3 +64,18 @@ func _ready() -> void:
 		battle_trigger.set_script(scr_battle_trigger)
 		ow_walker.add_child(battle_trigger)
 		ow_walker.other_entered_my_cell.connect((battle_trigger as BattleTrigger)._on_ow_random_walker_other_entered_my_cell)
+
+func _input(event: InputEvent) -> void:
+	if not event.is_action_pressed("open_menu"):
+		return
+	if Game.in_battle:
+		return
+
+	if _paused:
+		_paused = false
+		_menu.close()
+		_overworld.process_mode = Node.PROCESS_MODE_ALWAYS
+	else:
+		_paused = true
+		_menu.open()
+		_overworld.process_mode = Node.PROCESS_MODE_DISABLED
