@@ -92,9 +92,8 @@ anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 780.0
-offset_right = 1020.0
-offset_bottom = 1560.0
+offset_right = 240.0
+offset_bottom = 780.0
 grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("1_mnbdi")
@@ -131,6 +130,12 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Name" type="TextEdit" parent="UI/UICont/ControlsCont"]
+layout_mode = 2
+placeholder_text = "Name"
+scroll_fit_content_height = true
+caret_blink = true
 
 [node name="BtnCreate" type="Button" parent="UI/UICont/ControlsCont"]
 layout_mode = 2

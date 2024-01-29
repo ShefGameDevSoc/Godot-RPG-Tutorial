@@ -5,6 +5,8 @@ const ps_rpg_actor := preload("res://actors/battleground/BGActor.tscn")
 const ps_selection_hud := preload("res://battlegrounds/ui/BattleHUD.tscn")
 const ps_random_selector := preload("res://battlegrounds/selectors/RandomSelector.tscn")
 
+enum BattleType { AI, ONLINE }
+
 @onready var _actors := $Actors
 @onready var _huds := $HUDs
 
@@ -50,6 +52,11 @@ func startup_battle(players: Array[Character], enemies: Array[Character]) -> voi
 
 	teams.append(team)
 	show()
+
+func startup_multiplayer_battle(me: PeerBattler, opponent: PeerBattler) -> void:
+
+	print("I, %s, would battle %s" % [ me.name, opponent.name ])
+	Lobby.leave_lobby()
 
 func end_battle(loser: Team) -> void:
 	for actor in loser.actors:

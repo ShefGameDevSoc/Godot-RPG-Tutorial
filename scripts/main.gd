@@ -65,6 +65,8 @@ func _ready() -> void:
 		ow_walker.add_child(battle_trigger)
 		ow_walker.other_entered_my_cell.connect((battle_trigger as BattleTrigger)._on_ow_random_walker_other_entered_my_cell)
 
+	Game.entered_battle.connect(self._on_entered_battle)
+
 func _input(event: InputEvent) -> void:
 	if not event.is_action_pressed("open_menu"):
 		return
@@ -79,3 +81,6 @@ func _input(event: InputEvent) -> void:
 		_paused = true
 		_menu.open()
 		_overworld.process_mode = Node.PROCESS_MODE_DISABLED
+
+func _on_entered_battle() -> void:
+	_menu.quick_close()
