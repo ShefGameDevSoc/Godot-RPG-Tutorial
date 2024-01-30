@@ -7,6 +7,8 @@ signal body_selected(rpg_actor)
 
 var character: Character
 
+var multiplayer_id: int
+
 @onready var _name: Label = $UI/Name
 @onready var _health_bar: ProgressBar = $UI/HealthBar
 

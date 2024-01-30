@@ -93,7 +93,7 @@ anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = 240.0
-offset_bottom = 780.0
+offset_bottom = 2340.0
 grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("1_mnbdi")
@@ -161,5 +161,7 @@ libraries = {
 "": SubResource("AnimationLibrary_8fhet")
 }
 
+[connection signal="text_changed" from="UI/UICont/ControlsCont/Name" to="." method="_on_name_text_changed"]
 [connection signal="pressed" from="UI/UICont/ControlsCont/BtnCreate" to="." method="_on_create_lobby"]
+[connection signal="text_changed" from="UI/UICont/ControlsCont/IPEnter" to="." method="_on_ip_enter_text_changed"]
 [connection signal="pressed" from="UI/UICont/ControlsCont/BtnJoin" to="." method="_on_join_lobby"]

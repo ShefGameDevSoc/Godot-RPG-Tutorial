@@ -21,6 +21,9 @@ func to_dict() -> Dictionary:
 		attack = attack, defense = defense, speed = speed
 	}
 
+func _to_string() -> String:
+	return "Char %s: HP %d/%d Atk %d Def %d Spd %d" % [name, health, max_health, attack, defense, speed]
+
 static func from_dict(dict: Dictionary) -> Character:
 	var character := Character.new()
 	character.name = dict.name
