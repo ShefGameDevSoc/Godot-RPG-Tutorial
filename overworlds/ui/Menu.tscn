@@ -92,8 +92,9 @@ anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 240.0
-offset_bottom = 2340.0
+offset_left = 780.0
+offset_right = 1020.0
+offset_bottom = 3120.0
 grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("1_mnbdi")
@@ -174,14 +175,12 @@ layout_mode = 2
 layout_mode = 2
 text = "Back"
 
-[node name="Label" type="Label" parent="UI/UICont/ControlsCont"]
-visible = false
+[node name="Label" type="Label" parent="UI/UICont/ControlsCont/ScrJoin"]
 layout_mode = 2
 text = "Enter Lobby IP:"
 horizontal_alignment = 1
 
-[node name="IPEnter" type="TextEdit" parent="UI/UICont/ControlsCont"]
-visible = false
+[node name="IPEnter" type="TextEdit" parent="UI/UICont/ControlsCont/ScrJoin"]
 layout_mode = 2
 placeholder_text = "000.000.000.000"
 scroll_fit_content_height = true
@@ -197,4 +196,4 @@ libraries = {
 [connection signal="pressed" from="UI/UICont/ControlsCont/ScrHome/BtnJoin" to="." method="_on_join_lobby"]
 [connection signal="pressed" from="UI/UICont/ControlsCont/ScrCreate/BtnBack" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="UI/UICont/ControlsCont/ScrJoin/BtnBack" to="." method="_on_back_pressed"]
-[connection signal="text_changed" from="UI/UICont/ControlsCont/IPEnter" to="." method="_on_ip_enter_text_changed"]
+[connection signal="text_changed" from="UI/UICont/ControlsCont/ScrJoin/IPEnter" to="." method="_on_ip_enter_text_changed"]

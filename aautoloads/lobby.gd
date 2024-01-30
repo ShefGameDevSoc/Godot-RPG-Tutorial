@@ -36,7 +36,7 @@ func create_lobby(name: String) -> Error:
 	return 0
 
 func join_lobby(address: String, name: String) -> Error:
-	if address:
+	if not address:
 		address = "127.0.0.1"
 
 	var peer := ENetMultiplayerPeer.new()
@@ -53,6 +53,10 @@ func join_lobby(address: String, name: String) -> Error:
 	multiplayer.multiplayer_peer = peer
 	return 0
 
+func cancel_lobby() -> void:
+	if multiplayer.has_multiplayer_peer():
+		multiplayer.multiplayer_peer = null
+
 func leave_lobby() -> void:
 	if multiplayer.has_multiplayer_peer():
 		multiplayer.multiplayer_peer = null
@@ -60,7 +64,7 @@ func leave_lobby() -> void:
 
 func is_server() -> bool: return multiplayer.multiplayer_peer and multiplayer.is_server()
 
-func get_id() -> int: return multiplayer.get_unique_id()
+func get_id() -> int: return multiplayer.get_unique_id() if multiplayer.has_multiplayer_peer() else -1
 
 func _on_player_connected(id: int) -> void:
 	_register_player.rpc_id(id, player_info)
@@ -81,6 +85,7 @@ func _on_server_disconnected() -> void:
 	multiplayer.multiplayer_peer = null
 	players.clear()
 	Game.battleground.end_multiplayer_battle(1, [ 1 ])
+	print("Server disconnected")
 
 @rpc("any_peer", "reliable")
 func _register_player(peer_info: Dictionary) -> void:

@@ -9,21 +9,22 @@ const ps_menu_button := preload("res://overworlds/ui/EscapeMenuButton.tscn")
 
 @onready var _name := $UI/UICont/ControlsCont/Name
 @onready var _lobby_ip := $UI/UICont/ControlsCont/ScrCreate/IP
+@onready var _ip_entry := $UI/UICont/ControlsCont/ScrJoin/IPEnter
 
 @onready var _screen_home := $UI/UICont/ControlsCont/ScrHome
 @onready var _screen_create := $UI/UICont/ControlsCont/ScrCreate
 @onready var _screen_join := $UI/UICont/ControlsCont/ScrJoin
 
-func _ready() -> void:
-	for ip: String in IP.get_local_addresses():
-		if len(ip.split(".")) != 4:
-			continue
-
-		var em_button: EscapeMenuButton = ps_menu_button.instantiate()
-		em_button.text = ip
-		em_button.option = ip
-		em_button.option_selected.connect(self._on_menu_button_pressed)
-		_screen_join.add_child(em_button)
+#func _ready() -> void:
+	#for ip: String in IP.get_local_addresses():
+		#if len(ip.split(".")) != 4:
+			#continue
+#
+		#var em_button: EscapeMenuButton = ps_menu_button.instantiate()
+		#em_button.text = ip
+		#em_button.option = ip
+		#em_button.option_selected.connect(self._on_menu_button_pressed)
+		#_screen_join.add_child(em_button)
 
 func open() -> void:
 	_animator.play("show")
@@ -79,11 +80,16 @@ func _on_join_lobby():
 func _on_name_text_changed() -> void:
 	_filter_text_edit(_name)
 
+func _on_ip_enter_text_changed() -> void:
+	_filter_text_edit(_ip_entry, true)
 
-func _filter_text_edit(te: TextEdit) -> void:
+func _filter_text_edit(te: TextEdit, no_alpha := false) -> void:
+	var regex := RegEx.new()
+	regex.compile("[0-9\\.]")
+
 	var filtered_text := ""
 	for c in te.text:
-		if c == "\n" or c == "\r":
+		if c == "\n" or c == "\r" or (no_alpha and not regex.search(c)):
 			continue
 		if c == "\t":
 			filtered_text += " "
@@ -104,4 +110,5 @@ func _on_back_pressed() -> void:
 	_screen_home.show()
 	_screen_create.hide()
 	_screen_join.hide()
-	Lobby.leave_lobby()
+	_name.grab_focus()
+	Lobby.cancel_lobby()
