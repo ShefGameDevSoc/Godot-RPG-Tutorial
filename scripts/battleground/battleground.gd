@@ -176,20 +176,14 @@ func _end_multiplayer_battle(winner: Team, losers: Array[Team]) -> void:
 
 	in_multiplayer = false
 
-	for loser in losers:
-		for actor in loser.actors:
-			if actor.is_in_group("player"):
-				get_tree().quit()
-
-	_clean_up_battleground()
-
 	if Lobby.is_server():
 		var loser_ids: Array[int] = []
 		for loser in losers:
 			loser_ids.append(loser.lobby_id)
 		Lobby.send_battle_results.rpc(winner.lobby_id, loser_ids)
 
-	Lobby.leave_lobby()
+	Lobby.leave_lobby.call_deferred()
+	_clean_up_battleground()
 
 func _execute_turn() -> void:
 	in_turn = true

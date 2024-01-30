@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bv7cal6vhlo21"]
+
+[ext_resource type="Script" path="res://scripts/overworld/ui/escape_menu_button.gd" id="1_3uni8"]
+
+[node name="EscapeMenuButton" type="Button"]
+text = "Localhost"
+script = ExtResource("1_3uni8")
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]

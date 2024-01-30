@@ -137,24 +137,55 @@ placeholder_text = "Name"
 scroll_fit_content_height = true
 caret_blink = true
 
-[node name="BtnCreate" type="Button" parent="UI/UICont/ControlsCont"]
+[node name="ScrHome" type="VBoxContainer" parent="UI/UICont/ControlsCont"]
+layout_mode = 2
+
+[node name="BtnCreate" type="Button" parent="UI/UICont/ControlsCont/ScrHome"]
 layout_mode = 2
 text = "Create Lobby"
 
+[node name="BtnJoin" type="Button" parent="UI/UICont/ControlsCont/ScrHome"]
+layout_mode = 2
+text = "Join Lobby"
+
+[node name="ScrCreate" type="VBoxContainer" parent="UI/UICont/ControlsCont"]
+visible = false
+layout_mode = 2
+
+[node name="BtnBack" type="Button" parent="UI/UICont/ControlsCont/ScrCreate"]
+layout_mode = 2
+text = "Back"
+
+[node name="IPLabel" type="Label" parent="UI/UICont/ControlsCont/ScrCreate"]
+layout_mode = 2
+text = "Your IP Address is:"
+horizontal_alignment = 1
+
+[node name="IP" type="Label" parent="UI/UICont/ControlsCont/ScrCreate"]
+layout_mode = 2
+text = "000.000.000.000"
+horizontal_alignment = 1
+
+[node name="ScrJoin" type="VBoxContainer" parent="UI/UICont/ControlsCont"]
+visible = false
+layout_mode = 2
+
+[node name="BtnBack" type="Button" parent="UI/UICont/ControlsCont/ScrJoin"]
+layout_mode = 2
+text = "Back"
+
 [node name="Label" type="Label" parent="UI/UICont/ControlsCont"]
+visible = false
 layout_mode = 2
 text = "Enter Lobby IP:"
 horizontal_alignment = 1
 
 [node name="IPEnter" type="TextEdit" parent="UI/UICont/ControlsCont"]
+visible = false
 layout_mode = 2
 placeholder_text = "000.000.000.000"
 scroll_fit_content_height = true
 caret_blink = true
-
-[node name="BtnJoin" type="Button" parent="UI/UICont/ControlsCont"]
-layout_mode = 2
-text = "Join"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -162,6 +193,8 @@ libraries = {
 }
 
 [connection signal="text_changed" from="UI/UICont/ControlsCont/Name" to="." method="_on_name_text_changed"]
-[connection signal="pressed" from="UI/UICont/ControlsCont/BtnCreate" to="." method="_on_create_lobby"]
+[connection signal="pressed" from="UI/UICont/ControlsCont/ScrHome/BtnCreate" to="." method="_on_create_lobby"]
+[connection signal="pressed" from="UI/UICont/ControlsCont/ScrHome/BtnJoin" to="." method="_on_join_lobby"]
+[connection signal="pressed" from="UI/UICont/ControlsCont/ScrCreate/BtnBack" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="UI/UICont/ControlsCont/ScrJoin/BtnBack" to="." method="_on_back_pressed"]
 [connection signal="text_changed" from="UI/UICont/ControlsCont/IPEnter" to="." method="_on_ip_enter_text_changed"]
-[connection signal="pressed" from="UI/UICont/ControlsCont/BtnJoin" to="." method="_on_join_lobby"]

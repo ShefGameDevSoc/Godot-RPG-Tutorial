@@ -28,4 +28,7 @@ func peer_action_selected(target_id: int, action_path: String) -> void:
 			break
 
 	var action := load(action_path) as Action
-	selector.action_selected.emit(target, action)
+	if action == null:
+		selector.action_selected.emit()
+	else:
+		selector.action_selected.emit(target, action)

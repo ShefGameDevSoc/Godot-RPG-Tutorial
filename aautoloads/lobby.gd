@@ -54,7 +54,9 @@ func join_lobby(address: String, name: String) -> Error:
 	return 0
 
 func leave_lobby() -> void:
-	server_disconnected.emit()
+	if multiplayer.has_multiplayer_peer():
+		multiplayer.multiplayer_peer = null
+		server_disconnected.emit()
 
 func is_server() -> bool: return multiplayer.multiplayer_peer and multiplayer.is_server()
 
@@ -65,6 +67,7 @@ func _on_player_connected(id: int) -> void:
 
 func _on_player_disconnected(id: int) -> void:
 	players.erase(id)
+	print("Player %d disconnected" % id)
 
 func _on_connected_ok() -> void:
 	var peer_id = multiplayer.get_unique_id()
@@ -77,6 +80,7 @@ func _on_connected_fail() -> void:
 func _on_server_disconnected() -> void:
 	multiplayer.multiplayer_peer = null
 	players.clear()
+	Game.battleground.end_multiplayer_battle(1, [ 1 ])
 
 @rpc("any_peer", "reliable")
 func _register_player(peer_info: Dictionary) -> void:

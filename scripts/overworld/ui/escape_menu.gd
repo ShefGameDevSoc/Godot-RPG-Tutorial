@@ -1,12 +1,29 @@
 class_name Menu
 extends Control
 
-@export var ip_field: TextEdit
+const ps_menu_button := preload("res://overworlds/ui/EscapeMenuButton.tscn")
+
+#@export var ip_field: TextEdit
 
 @onready var _animator := $AnimationPlayer
 
 @onready var _name := $UI/UICont/ControlsCont/Name
-@onready var _lobby_ip := $UI/UICont/ControlsCont/IPEnter
+@onready var _lobby_ip := $UI/UICont/ControlsCont/ScrCreate/IP
+
+@onready var _screen_home := $UI/UICont/ControlsCont/ScrHome
+@onready var _screen_create := $UI/UICont/ControlsCont/ScrCreate
+@onready var _screen_join := $UI/UICont/ControlsCont/ScrJoin
+
+func _ready() -> void:
+	for ip: String in IP.get_local_addresses():
+		if len(ip.split(".")) != 4:
+			continue
+
+		var em_button: EscapeMenuButton = ps_menu_button.instantiate()
+		em_button.text = ip
+		em_button.option = ip
+		em_button.option_selected.connect(self._on_menu_button_pressed)
+		_screen_join.add_child(em_button)
 
 func open() -> void:
 	_animator.play("show")
@@ -27,21 +44,41 @@ func _on_create_lobby():
 	if error:
 		print("There was an error with setting up the lobby")
 
+	var hostname := ""
+	match OS.get_name():
+		"Windows":
+			hostname = str(OS.get_environment("COMPUTERNAME"))
+		"macOS":
+			hostname = str(OS.get_environment("HOSTNAME"))
+		"Linux", "FreeBSD", "NetBSD", "OpenBSD", "BSD":
+			hostname = str(OS.get_environment("HOSTNAME"))
+		"Android":
+			print("Android")
+		"iOS":
+			print("iOS")
+		"Web":
+			print("Web")
+
+	_lobby_ip.text = IP.resolve_hostname(hostname, IP.TYPE_IPV4)
+	_screen_home.hide()
+	_screen_create.show()
+	_screen_join.hide()
+
 
 func _on_join_lobby():
-	if _name.text == "":
-		return
-
-	var error := Lobby.join_lobby(_lobby_ip.text, _name.text)
-	if error:
-		print("Could not join lobby")
-
+	_screen_home.hide()
+	_screen_create.hide()
+	_screen_join.show()
+	#if _name.text == "":
+		#return
+#
+	#var error := Lobby.join_lobby(_lobby_ip.text, _name.text)
+	#if error:
+		#print("Could not join lobby")
 
 func _on_name_text_changed() -> void:
 	_filter_text_edit(_name)
 
-func _on_ip_enter_text_changed():
-	_filter_text_edit(ip_field)
 
 func _filter_text_edit(te: TextEdit) -> void:
 	var filtered_text := ""
@@ -54,3 +91,17 @@ func _filter_text_edit(te: TextEdit) -> void:
 			filtered_text += c
 	te.text = filtered_text
 	te.set_caret_column(len(filtered_text))
+
+func _on_menu_button_pressed(option: String) -> void:
+	if _name.text == "":
+		return
+
+	var error := Lobby.join_lobby(option, _name.text)
+	if error:
+		print("Could not join lobby")
+
+func _on_back_pressed() -> void:
+	_screen_home.show()
+	_screen_create.hide()
+	_screen_join.hide()
+	Lobby.leave_lobby()
