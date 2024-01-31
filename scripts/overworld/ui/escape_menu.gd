@@ -1,10 +1,6 @@
 class_name Menu
 extends Control
 
-const ps_menu_button := preload("res://overworlds/ui/EscapeMenuButton.tscn")
-
-#@export var ip_field: TextEdit
-
 @onready var _animator := $AnimationPlayer
 
 @onready var _name := $UI/UICont/ControlsCont/Name
@@ -14,17 +10,6 @@ const ps_menu_button := preload("res://overworlds/ui/EscapeMenuButton.tscn")
 @onready var _screen_home := $UI/UICont/ControlsCont/ScrHome
 @onready var _screen_create := $UI/UICont/ControlsCont/ScrCreate
 @onready var _screen_join := $UI/UICont/ControlsCont/ScrJoin
-
-#func _ready() -> void:
-	#for ip: String in IP.get_local_addresses():
-		#if len(ip.split(".")) != 4:
-			#continue
-#
-		#var em_button: EscapeMenuButton = ps_menu_button.instantiate()
-		#em_button.text = ip
-		#em_button.option = ip
-		#em_button.option_selected.connect(self._on_menu_button_pressed)
-		#_screen_join.add_child(em_button)
 
 func open() -> void:
 	_animator.play("show")
@@ -98,11 +83,11 @@ func _filter_text_edit(te: TextEdit, no_alpha := false) -> void:
 	te.text = filtered_text
 	te.set_caret_column(len(filtered_text))
 
-func _on_menu_button_pressed(option: String) -> void:
-	if _name.text == "":
+func _on_join_pressed() -> void:
+	if _name.text == "" or _ip_entry.text == "":
 		return
 
-	var error := Lobby.join_lobby(option, _name.text)
+	var error := Lobby.join_lobby(_ip_entry.text, _name.text)
 	if error:
 		print("Could not join lobby")
 
