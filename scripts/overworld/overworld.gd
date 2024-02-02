@@ -1,5 +1,11 @@
 class_name Overworld
 extends Node2D
+## Responsible for placing and moving [OWActor]s about a [TileMap]
+##
+## Implements grid-based movement by moving [OWActor]s in the direction they request to be moved
+## in
+## When an actor moves into a new cell, the [signal OWActor.other_entered_my_cell] signal is
+## emitted on all actors in that cell
 
 const UNUSED_TILE_COORDS := Vector2i(100000, 100000)
 
@@ -24,28 +30,52 @@ func enter() -> void:
 	for actor in actors:
 		actor.check_if_alive()
 
+# Adds the [param actor] to the overworld, moving it to nearest space on the tilemap
 func add_actor(actor: OWActor):
-	if not actors.has(actor):
-		# Moving the actor to its closest place on the grid
-		var half_size: Vector2 = tilemap.tile_set.tile_size * 0.5
-		var asjusted_actor_pos: Vector2 = actor.position - half_size
+	if actors.has(actor):
+		return
 
-		var ratio_to_tile_size: Vector2 = asjusted_actor_pos / Vector2(tilemap.tile_set.tile_size)
-		var floored_ratio: Vector2 = floor(ratio_to_tile_size)
-		actor.position = floored_ratio * Vector2(tilemap.tile_set.tile_size) + half_size
-		actors.append(actor)
+	# Moving the actor to its closest place on the grid
+	var half_size: Vector2 = tilemap.tile_set.tile_size * 0.5
+	var asjusted_actor_pos: Vector2 = actor.position - half_size
 
-		var actor_coords: Vector2i = tilemap.local_to_map(tilemap.to_local(actor.position))
-		if actor_coords in occupied_cells:
-			occupied_cells[actor_coords].append(actor)
-		else:
-			occupied_cells[actor_coords] = [ actor ]
+	var ratio_to_tile_size: Vector2 = asjusted_actor_pos / Vector2(tilemap.tile_set.tile_size)
+	var floored_ratio: Vector2 = floor(ratio_to_tile_size)
+	actor.position = floored_ratio * Vector2(tilemap.tile_set.tile_size) + half_size
+	actors.append(actor)
 
+	var actor_coords: Vector2i = tilemap.local_to_map(tilemap.to_local(actor.position))
+	if actor_coords in occupied_cells:
+		occupied_cells[actor_coords].append(actor)
+	else:
+		occupied_cells[actor_coords] = [ actor ]
+
+## Removes the [param actor] from the overworld
 func remove_actor(actor: OWActor):
 	if actors.has(actor):
 		actors.erase(actor)
 
-# Called when the node enters the scene tree for the first time.
+func get_unused_walkable_coords() -> Array[Vector2i]:
+	var all_coords: Array[Vector2i] = tilemap.get_used_cells_by_id(tile_map_ground_layer)
+	var walkable_coords: Array[Vector2i] = []
+	for coord in all_coords:
+		var tile_data: TileData = tilemap.get_cell_tile_data(tile_map_ground_layer, coord)
+
+		if tile_data.get_custom_data("walkable"):
+			walkable_coords.append(coord)
+
+	for actor in actors:
+		var actor_coords := get_actor_cell_coords(actor)
+		if actor_coords in walkable_coords:
+			all_coords.erase(actor_coords)
+	
+	return walkable_coords
+
+func get_actor_cell_coords(actor: OWActor) -> Vector2i:
+	if not actor in actors:
+		return UNUSED_TILE_COORDS
+	return tilemap.local_to_map(tilemap.to_local(actor.position))
+
 func _ready():
 	if Game.world == null:
 		Game.world = self
@@ -132,24 +162,3 @@ func _move_actor(actor: OWActor) -> void:
 		occupied_cells[next_tile_coords].append(actor)
 	else:
 		occupied_cells[next_tile_coords] = [ actor ]
-
-func get_unused_walkable_coords() -> Array[Vector2i]:
-	var all_coords: Array[Vector2i] = tilemap.get_used_cells_by_id(tile_map_ground_layer)
-	var walkable_coords: Array[Vector2i] = []
-	for coord in all_coords:
-		var tile_data: TileData = tilemap.get_cell_tile_data(tile_map_ground_layer, coord)
-
-		if tile_data.get_custom_data("walkable"):
-			walkable_coords.append(coord)
-
-	for actor in actors:
-		var actor_coords := get_actor_cell_coords(actor)
-		if actor_coords in walkable_coords:
-			all_coords.erase(actor_coords)
-	
-	return walkable_coords
-
-func get_actor_cell_coords(actor: OWActor) -> Vector2i:
-	if not actor in actors:
-		return UNUSED_TILE_COORDS
-	return tilemap.local_to_map(tilemap.to_local(actor.position))

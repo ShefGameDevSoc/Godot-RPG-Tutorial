@@ -1,4 +1,8 @@
 extends Node
+## Handles the Main scene
+##
+## Generates and spawns in the player and the enemies, placing them in the
+## [member _overworld]
 
 const scr_battle_trigger := preload("res://scripts/overworld/battle_trigger.gd")
 
@@ -7,7 +11,7 @@ const scr_battle_trigger := preload("res://scripts/overworld/battle_trigger.gd")
 
 @export var _battleground: BattleGround
 
-@export var _menu: Menu
+@export var _menu: LobbyMenu
 
 @export var _player_actor: PackedScene
 @export var _roaming_enemies: Array[PackedScene]

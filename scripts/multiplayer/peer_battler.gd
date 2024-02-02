@@ -1,4 +1,5 @@
 class_name PeerBattler
+## Represents a peer from the lobby
 
 var id: int
 var name: String

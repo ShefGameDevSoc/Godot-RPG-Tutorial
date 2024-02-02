@@ -1,9 +1,9 @@
 class_name BattleTrigger
 extends Node
-
-@export_range(1, 5) var _max_num_enemies := 1
-
-@export var _potential_enemies: Array[ActionLibrary]
+## Triggers a battle when a player walks into the same grid space this trigger is in
+##
+## The parent is expected to be an [OWActor] to which this script connects to it's
+## [signal other_entered_my_cell] signal
 
 func _on_ow_random_walker_other_entered_my_cell(other_actor: OWActor) -> void:
 	if not other_actor.is_in_group("player"):

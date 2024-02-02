@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://804w1ghsq0ti"]
+[gd_scene load_steps=3 format=3 uid="uid://cwjrmhs1bipek"]
 
-[ext_resource type="Script" path="res://scripts/battleground/peer_selector.gd" id="1_00ori"]
+[ext_resource type="Script" path="res://scripts/battleground/client_selector.gd" id="1_00ori"]
 [ext_resource type="Script" path="res://scripts/battleground/selector_interface.gd" id="2_ms40h"]
 
-[node name="PeerSelector" type="Node"]
+[node name="ClientSelector" type="Node"]
 script = ExtResource("1_00ori")
 
 [node name="Selector" type="Node" parent="."]

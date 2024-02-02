@@ -1,4 +1,5 @@
 extends Node
+## Keyboard Controls for an [OWActor]
 
 @export var _actor: OWActor
 

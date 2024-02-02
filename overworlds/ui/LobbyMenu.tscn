@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://dlw082hbvbs2x"]
 
-[ext_resource type="Script" path="res://scripts/overworld/ui/escape_menu.gd" id="1_mnbdi"]
+[ext_resource type="Script" path="res://scripts/overworld/ui/lobby_menu.gd" id="1_mnbdi"]
 
 [sub_resource type="Animation" id="Animation_s48a2"]
 length = 0.001
@@ -86,14 +86,14 @@ _data = {
 "show": SubResource("Animation_6gev6")
 }
 
-[node name="Menu" type="Control"]
+[node name="LobbyMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = 240.0
-offset_bottom = 3120.0
+offset_bottom = 3900.0
 grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("1_mnbdi")

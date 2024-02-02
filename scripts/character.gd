@@ -1,4 +1,5 @@
 class_name Character
+## A representation of the stats of a character
 
 var name: String
 
@@ -10,6 +11,9 @@ var attack := 40
 var defense := 50
 var speed := 100
 
+## Serialises this character in a [Dictionary]
+##
+## Primarily used to send this character's data over a network
 func to_dict() -> Dictionary:
 	var actions_as_paths: Array[String] = []
 	for action in actions:
@@ -21,9 +25,9 @@ func to_dict() -> Dictionary:
 		attack = attack, defense = defense, speed = speed
 	}
 
-func _to_string() -> String:
-	return "Char %s: HP %d/%d Atk %d Def %d Spd %d" % [name, health, max_health, attack, defense, speed]
-
+## Deserialises a character from a [Dictionary]
+##
+## Primarily used for using character data passed over a network
 static func from_dict(dict: Dictionary) -> Character:
 	var character := Character.new()
 	character.name = dict.name
@@ -37,3 +41,6 @@ static func from_dict(dict: Dictionary) -> Character:
 		character.actions.append(load(path))
 
 	return character
+
+func _to_string() -> String:
+	return "Char %s: HP %d/%d Atk %d Def %d Spd %d" % [name, health, max_health, attack, defense, speed]

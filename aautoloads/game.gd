@@ -1,4 +1,8 @@
 extends Node
+## Autoload for the game state
+##
+## Contains functions for switching between the two major states: Overworld and BattleGround
+## Fins the relevant nodes using groups
 
 signal entered_overworld
 signal entered_battle
@@ -19,6 +23,8 @@ func _ready() -> void:
 
 	Lobby.server_disconnected.connect(self.enter_overworld)
 
+## Switches the active state to the battleground
+## Takes in one array of characters for the two soides of the battle, the player and the enemies
 func enter_battle(players: Array[Character], enemies: Array[Character]) -> void:
 	if not battleground:
 		return
@@ -29,6 +35,8 @@ func enter_battle(players: Array[Character], enemies: Array[Character]) -> void:
 	switch_to_battleground_cameras()
 	entered_battle.emit()
 
+## Switches the active state to the battleground, in preparation for a multiplayer battle
+## Takes in [PeerBattler] objects for both sides
 func enter_multiplayer_battle(me: PeerBattler, opponent: PeerBattler) -> void:
 	if not battleground:
 		return
@@ -39,6 +47,7 @@ func enter_multiplayer_battle(me: PeerBattler, opponent: PeerBattler) -> void:
 	battleground.startup_multiplayer_battle(me, opponent)
 	entered_battle.emit()
 
+## Switches the active scene to overworld
 func enter_overworld() -> void:
 	in_battle = false
 	world.process_mode = Node.PROCESS_MODE_INHERIT

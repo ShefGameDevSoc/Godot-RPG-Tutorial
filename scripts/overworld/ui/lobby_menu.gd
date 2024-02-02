@@ -1,5 +1,6 @@
-class_name Menu
+class_name LobbyMenu
 extends Control
+## A menu for setting up or joining a lobby to play multiplayer battles
 
 @onready var _animator := $AnimationPlayer
 
@@ -11,16 +12,27 @@ extends Control
 @onready var _screen_create := $UI/UICont/ControlsCont/ScrCreate
 @onready var _screen_join := $UI/UICont/ControlsCont/ScrJoin
 
+## Opens the menu
+##
+## Also plays a quick animation of the menu opening
 func open() -> void:
 	_animator.play("show")
 	_name.grab_focus()
 
+## Closes the menu
+##
+## Also plays a quick animation of the menu closing
 func close() -> void:
 	_animator.play("hide")
+	_name.release_focus()
 
+## Closes the menu
+##
+## No animation is played
 func quick_close() -> void:
 	_animator.play("hide")
 	_animator.seek(1.0)
+	_name.release_focus()	
 
 func _on_create_lobby():
 	if _name.text == "":
@@ -50,17 +62,10 @@ func _on_create_lobby():
 	_screen_create.show()
 	_screen_join.hide()
 
-
 func _on_join_lobby():
 	_screen_home.hide()
 	_screen_create.hide()
 	_screen_join.show()
-	#if _name.text == "":
-		#return
-#
-	#var error := Lobby.join_lobby(_lobby_ip.text, _name.text)
-	#if error:
-		#print("Could not join lobby")
 
 func _on_name_text_changed() -> void:
 	_filter_text_edit(_name)

@@ -1,4 +1,8 @@
 extends Node
+## A random walker for an [OWActor]
+##
+## Picks a new direction at random at a random interval defined by
+## [member move_timeout] and [member move_timeout_vicinity]
 
 @export var _actor: OWActor
 @export_range(0, 20) var move_timeout := 1.0

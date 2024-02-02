@@ -1,11 +1,16 @@
 class_name BattleGround
 extends Node2D
+## Executes the turn based combat of the battles
+##
+## Sets up [BGActor]s to represent the [Character]s partaking in the battle
+## Handles the turn based combat using signals. This script is also set up to
+## handle multiplayer
 
 const ps_rpg_actor := preload("res://actors/battleground/BGActor.tscn")
 const ps_selection_hud := preload("res://battlegrounds/ui/BattleHUD.tscn")
 const ps_random_selector := preload("res://battlegrounds/selectors/RandomSelector.tscn")
 
-const ps_peer_selector := preload("res://battlegrounds/selectors/PeerSelector.tscn")
+const ps_client_selector := preload("res://battlegrounds/selectors/ClientSelector.tscn")
 
 enum BattleType { AI, ONLINE }
 
@@ -16,6 +21,7 @@ var in_turn: bool = false
 
 var in_multiplayer := false
 
+## Represents a side of the battle
 class Team:
 	var lobby_id := -1
 	var actors: Array[BGActor]
@@ -26,6 +32,10 @@ var actors_by_multiplayer_id: Dictionary
 var multiplayer_me: PeerBattler
 var multiplayer_opponent: PeerBattler
 
+## Starts a local battle, most commonly between the player and AI
+##
+## Populates the battleground with [BGActor]s then enables the node this script is
+## attaached to
 func startup_battle(players: Array[Character], enemies: Array[Character]) -> void:
 	teams = []
 	var team := Team.new()
@@ -41,7 +51,7 @@ func startup_battle(players: Array[Character], enemies: Array[Character]) -> voi
 		actor.selector = hud.selector
 
 		actor.character = char
-		actor.update_character_ui()
+		actor.update_ui()
 
 	teams.append(team)
 	team = Team.new()
@@ -57,12 +67,18 @@ func startup_battle(players: Array[Character], enemies: Array[Character]) -> voi
 		actor.selector = rs.selector
 
 		actor.character = char
-		actor.update_character_ui()
+		actor.update_ui()
 
 	teams.append(team)
 	show()
 	in_multiplayer = false
 
+## Starts a multiplayer battle
+##
+## Populates the battleground with [BGActor]s then enables the node this script is
+## attaached to
+## It sends RPCs throughout the lobby to instantiate these actors in order, so that every
+## actor has the same ID on every peer
 func startup_multiplayer_battle(me: PeerBattler, opponent: PeerBattler) -> void:
 	teams = [ Team.new(), Team.new() ]
 	actors_by_multiplayer_id = {}
@@ -83,6 +99,11 @@ func startup_multiplayer_battle(me: PeerBattler, opponent: PeerBattler) -> void:
 
 	Lobby.show_battleground.rpc()
 
+## Instantiates a [BGActor] for use in multiplayer battles
+##
+## It selectively instantiates an appropriate selector
+## If the [Character] belongs to this peer. instantiate a [BattleHUD]
+## Otherwise if this peer is the server, instatiate a [ClientSelector]
 func multiplayer_instantiate(lobby_id: int, idx_character: int, multiplayer_id: int) -> void:
 	var is_me := lobby_id == Lobby.get_id()
 	var idx_team := 0 if is_me else 1
@@ -106,16 +127,17 @@ func multiplayer_instantiate(lobby_id: int, idx_character: int, multiplayer_id: 
 		_huds.add_child(hud)
 		actor.selector = hud.selector
 	elif Lobby.is_server():
-		var ps: PeerSelector = ps_peer_selector.instantiate()
-		ps.peer_id = lobby_id
-		_huds.add_child(ps)
-		actor.selector = ps.selector
+		var cs: ClientSelector = ps_client_selector.instantiate()
+		cs.peer_id = lobby_id
+		_huds.add_child(cs)
+		actor.selector = cs.selector
 
 	_actors.add_child(actor)
 
-	actor.update_character_ui()
+	actor.update_ui()
 	actors_by_multiplayer_id[multiplayer_id] = actor
 
+## [b]Client[/b] Triggers the client's selection process and returns the results back to the server
 func client_selection(sender: int, me_: int, allies_: Array[int], opponents_: Array[int]) -> void:
 	var me: BGActor = actors_by_multiplayer_id[me_]
 	var allies: Array[BGActor] = []
@@ -134,13 +156,18 @@ func client_selection(sender: int, me_: int, allies_: Array[int], opponents_: Ar
 
 	Lobby.client_action_selected.rpc_id(sender, target, action)
 
+## [b]Client[/b] Takes the state of the battle and updates the battleground to reflect it
+##
+## As of now that only involves the health bars
 func update_battle_state(state: Dictionary) -> void:
 	for multiplayer_id: int in state:
 		var bga: BGActor = actors_by_multiplayer_id[multiplayer_id]
 		bga.character.health = state[multiplayer_id].health
-		bga.update_character_ui()
+		bga.update_ui()
 
-
+## [b]Client[/b] Ends the multiplayer battle on the client
+##
+## Takes indexes for the teams to denote who won and who lost
 func end_multiplayer_battle(winner_id: int, losers_ids: Array[int]) -> void:
 	var winner: Team = null
 	var losers: Array[Team] = []
@@ -151,6 +178,13 @@ func end_multiplayer_battle(winner_id: int, losers_ids: Array[int]) -> void:
 			losers.append(team)
 
 	_end_multiplayer_battle(winner, losers)
+
+func _process(delta: float) -> void:
+	if in_multiplayer and not Lobby.is_server():
+		return
+
+	if not in_turn:
+		_execute_turn()
 
 func _clean_up_battleground() -> void:
 	hide()
@@ -220,18 +254,11 @@ func _execute_turn() -> void:
 			continue
 		var target: BGActor = params[0]
 		var action: Action = params[1]
-		apply_action(rpga, target, action)
+		_apply_action(rpga, target, action)
 
 	in_turn = false
 
-func _process(delta: float) -> void:
-	if in_multiplayer and not Lobby.is_server():
-		return
-
-	if not in_turn:
-		_execute_turn()
-
-func apply_action(user: BGActor, target: BGActor, action: Action) -> void:
+func _apply_action(user: BGActor, target: BGActor, action: Action) -> void:
 	if not action.cannot_miss and float(action.accuracy) < randf() * 100.0:
 		print("%s's attack missed!" % user.character.name)
 		return
@@ -244,7 +271,7 @@ func apply_action(user: BGActor, target: BGActor, action: Action) -> void:
 						  / target.character.defense * (1.0 - randf() * 0.2))
 			print("Dealing %d damage to %s" % [ damage, target.character.name ])
 			target.character.health = max(0, target.character.health - damage)
-			target.update_health()
+			target.update_ui()
 			if target.character.health <= 0:
 				print("%s has died" % target.name)
 				_check_for_battle_end()
@@ -255,7 +282,7 @@ func apply_action(user: BGActor, target: BGActor, action: Action) -> void:
 			print("Healing %s by %s" % [ target.character.name, to_heal ])
 			target.character.health = min(target.character.max_health,
 										  target.character.health + to_heal)
-			target.update_health()
+			target.update_ui()
 
 	if not in_multiplayer:
 		return

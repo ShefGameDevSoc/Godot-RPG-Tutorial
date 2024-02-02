@@ -1,5 +1,9 @@
 class_name CharacterDefinition
 extends Resource
+## Defines a blueprint for a [Character] to be generated from
+##
+## Defines baseline values for the various stats and ranges for these stats to exist in
+## When a new [Character] is wanted it creates one with stats randomly within the ranges defined
 
 @export var _name: String
 
@@ -17,6 +21,7 @@ extends Resource
 @export var _speed := 100
 @export var _speed_vicinity := 20
 
+## Creates a new [Character]
 func create(rng: RandomNumberGenerator) -> Character:
 	var c := Character.new()
 	c.actions = _actions

@@ -1,5 +1,6 @@
 class_name RandomSelector
 extends Node
+## A selector that selects actions a random
 
 @onready var selector := $Selector
 
