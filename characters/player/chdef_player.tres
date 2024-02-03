@@ -1,15 +1,12 @@
-[gd_resource type="Resource" script_class="CharacterDefinition" load_steps=6 format=3 uid="uid://bh5fcoim7kqbx"]
+[gd_resource type="Resource" script_class="CharacterDefinition" load_steps=3 format=3 uid="uid://bh5fcoim7kqbx"]
 
 [ext_resource type="Script" path="res://scripts/character/character_definition.gd" id="1_15v1m"]
-[ext_resource type="Resource" uid="uid://bqec2ubmw8c27" path="res://actions/focus_blast.tres" id="1_tswwx"]
 [ext_resource type="Resource" uid="uid://cghp2ukp5owic" path="res://actions/punch.tres" id="2_tx4qo"]
-[ext_resource type="Resource" uid="uid://bw2l2w7x7qhk3" path="res://actions/tackle.tres" id="3_wfynp"]
-[ext_resource type="Resource" uid="uid://brpil1gjny7u0" path="res://actions/self_heal.tres" id="4_r766f"]
 
 [resource]
 script = ExtResource("1_15v1m")
 _name = "Player"
-_actions = Array[Resource("res://scripts/action/action.gd")]([ExtResource("1_tswwx"), ExtResource("2_tx4qo"), ExtResource("3_wfynp"), ExtResource("4_r766f")])
+_actions = Array[Resource("res://scripts/action/action.gd")]([ExtResource("2_tx4qo")])
 _health = 160
 _health_vicinity = 10
 _attack = 60

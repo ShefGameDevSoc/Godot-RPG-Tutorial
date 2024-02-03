@@ -1,13 +1,15 @@
 [gd_scene load_steps=3 format=3 uid="uid://blrf7dhnix177"]
 
 [ext_resource type="Script" path="res://scripts/battleground/battleground.gd" id="1_vqgrq"]
-[ext_resource type="Texture2D" uid="uid://cqwegsjt67ss5" path="res://colour_grid.png" id="2_b7u1t"]
+[ext_resource type="Texture2D" uid="uid://dtp7vtxgie5rb" path="res://plain_image.png" id="2_ag3g2"]
 
 [node name="BG_Normal" type="Node2D" groups=["battleground"]]
 script = ExtResource("1_vqgrq")
 
 [node name="BKG" type="Sprite2D" parent="."]
-texture = ExtResource("2_b7u1t")
+modulate = Color(0.168627, 0.411765, 0.196078, 1)
+scale = Vector2(800, 800)
+texture = ExtResource("2_ag3g2")
 
 [node name="Camera2D" type="Camera2D" parent="." groups=["cam_battleground"]]
 

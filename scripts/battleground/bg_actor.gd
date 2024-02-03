@@ -34,7 +34,6 @@ func make_choice(in_allies: Array[BGActor], in_opponents: Array[BGActor]) -> Arr
 	return [] if res == null else res
 
 ## Updates the UI for this actor
-
 func update_ui() -> void:
 	_health_bar.value = float(character.health) / float(character.max_health)
 	_name.text = character.name

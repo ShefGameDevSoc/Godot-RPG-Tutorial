@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cqwegsjt67ss5"
-path="res://.godot/imported/colour_grid.png-ec25477fe3b73e858c2492ff493a6095.ctex"
+uid="uid://dtp7vtxgie5rb"
+path="res://.godot/imported/plain_image.png-1815797e78c1640e40501f6a1891d1c2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://colour_grid.png"
-dest_files=["res://.godot/imported/colour_grid.png-ec25477fe3b73e858c2492ff493a6095.ctex"]
+source_file="res://plain_image.png"
+dest_files=["res://.godot/imported/plain_image.png-1815797e78c1640e40501f6a1891d1c2.ctex"]
 
 [params]
 
