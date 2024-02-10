@@ -80,3 +80,43 @@ func _execute_turn() -> void:
 
 func _apply_action(user: BGActor, target: BGActor, action: Action) -> void:
 	pass
+
+#######################
+## MULTIPLAYER STUFF ##
+#######################
+
+## Starts a multiplayer battle
+##
+## Populates the battleground with [BGActor]s then enables the node this script is
+## attaached to
+## It sends RPCs throughout the lobby to instantiate these actors in order, so that every
+## actor has the same ID on every peer
+func startup_multiplayer_battle(me: PeerBattler, opponent: PeerBattler) -> void:
+	pass
+
+## Instantiates a [BGActor] for use in multiplayer battles
+##
+## It selectively instantiates an appropriate selector
+## If the [Character] belongs to this peer. instantiate a [BattleHUD]
+## Otherwise if this peer is the server, instatiate a [ClientSelector]
+func multiplayer_instantiate(lobby_id: int, idx_character: int, multiplayer_id: int) -> void:
+	pass
+
+## [b]Client[/b] Triggers the client's selection process and returns the results back to the server
+func client_selection(sender: int, me_: int, allies_: Array[int], opponents_: Array[int]) -> void:
+	pass
+
+## [b]Client[/b] Takes the state of the battle and updates the battleground to reflect it
+##
+## As of now that only involves the health bars
+func update_battle_state(state: Dictionary) -> void:
+	pass
+
+## [b]Client[/b] Ends the multiplayer battle on the client
+##
+## Takes indexes for the teams to denote who won and who lost
+func end_multiplayer_battle(winner_id: int, losers_ids: Array[int]) -> void:
+	pass
+
+func _serialise_battle_state() -> Dictionary:
+	return {}
