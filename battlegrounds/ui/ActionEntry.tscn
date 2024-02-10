@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://dw7x1sx50vc24"]
+[gd_scene load_steps=2 format=3 uid="uid://chr3y1kismijx"]
 
 [ext_resource type="Script" path="res://scripts/battleground/ui/action_entry.gd" id="1_1qj2m"]
 

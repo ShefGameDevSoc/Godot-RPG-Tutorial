@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://cskhalchqfm40"]
+
+[ext_resource type="Script" path="res://scripts/battleground/client_selector.gd" id="1_00ori"]
+[ext_resource type="Script" path="res://scripts/battleground/selector_interface.gd" id="2_ms40h"]
+
+[node name="ClientSelector" type="Node"]
+script = ExtResource("1_00ori")
+
+[node name="Selector" type="Node" parent="."]
+script = ExtResource("2_ms40h")
+
+[connection signal="action_selection_started" from="Selector" to="." method="_on_action_selection_started"]

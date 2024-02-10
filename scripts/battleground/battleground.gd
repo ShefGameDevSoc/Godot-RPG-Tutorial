@@ -15,6 +15,8 @@ const ps_rpg_actor := preload("res://actors/battleground/BGActor.tscn")
 const ps_selection_hud := preload("res://battlegrounds/ui/BattleHUD.tscn")
 const ps_random_selector := preload("res://battlegrounds/RandomSelector.tscn")
 
+const ps_client_selector := preload("res://battlegrounds/ClientSelector.tscn")
+
 enum BattleType { AI, ONLINE }
 
 #// The @onready annotation says that this variable will be set just before the _ready() function
@@ -33,6 +35,7 @@ var in_turn: bool = false
 #// This is an inner class, note the colon (:) after the class name
 ## Represents a side of the battle
 class Team:
+	var lobby_id: int
 	var actors: Array[BGActor]
 
 #// Declare an array of a specific type
@@ -44,6 +47,8 @@ var actors_by_multiplayer_id: Dictionary
 
 var multiplayer_me: PeerBattler
 var multiplayer_opponent: PeerBattler
+
+var in_multiplayer := false
 
 ## Starts a local battle, most commonly between the player and AI
 ##
@@ -95,6 +100,9 @@ func startup_battle(players: Array[Character], enemies: Array[Character]) -> voi
 #// It is a sibling _ready() that is called when the node first enters a scene
 #// In Godot, the delta time is passed into the _process function as a parameter
 func _process(delta: float) -> void:
+	if in_multiplayer and not Lobby.is_server():
+		return
+
 	#// The if state is identical to Python
 	if not in_turn:
 		_execute_turn()
@@ -174,6 +182,10 @@ func _apply_action(user: BGActor, target: BGActor, action: Action) -> void:
 
 	target.update_ui()
 
+	if in_multiplayer:
+		var state := _serialise_battle_state()
+		Lobby.update_battle_state.rpc(state)
+
 	if target.character.health <= 0:
 		print("%s has died" % target.name)
 		_check_for_battle_end()
@@ -193,7 +205,10 @@ func _check_for_battle_end() -> void:
 	if len(not_all_dead) > 1:
 		return
 
-	_end_battle(not_all_dead[0], all_dead)
+	if in_multiplayer:
+		_end_multiplayer_battle(not_all_dead[0], all_dead)
+	else:
+		_end_battle(not_all_dead[0], all_dead)
 
 #######################
 ## MULTIPLAYER STUFF ##
@@ -206,7 +221,24 @@ func _check_for_battle_end() -> void:
 ## It sends RPCs throughout the lobby to instantiate these actors in order, so that every
 ## actor has the same ID on every peer
 func startup_multiplayer_battle(me: PeerBattler, opponent: PeerBattler) -> void:
-	pass
+	teams = [ Team.new(), Team.new() ]
+	actors_by_multiplayer_id = {}
+	in_multiplayer = true
+	multiplayer_me = me
+	multiplayer_opponent = opponent
+	if not Lobby.is_server():
+		return
+
+	var multiplayer_id := 0
+	for i in range(len(me.characters)):
+		Lobby.instantiate_actor.rpc(me.id, i, multiplayer_id)
+		multiplayer_id += 1
+
+	for j in range(len(opponent.characters)):
+		Lobby.instantiate_actor.rpc(opponent.id, j, multiplayer_id)
+		multiplayer_id += 1
+
+	Lobby.show_battleground.rpc()
 
 ## Instantiates a [BGActor] for use in multiplayer battles
 ##
@@ -214,26 +246,97 @@ func startup_multiplayer_battle(me: PeerBattler, opponent: PeerBattler) -> void:
 ## If the [Character] belongs to this peer. instantiate a [BattleHUD]
 ## Otherwise if this peer is the server, instatiate a [ClientSelector]
 func multiplayer_instantiate(lobby_id: int, idx_character: int, multiplayer_id: int) -> void:
-	pass
+	var is_me := lobby_id == Lobby.get_id()
+	var idx_team := 0 if is_me else 1
+	if teams[idx_team].lobby_id == -1:
+		teams[idx_team].lobby_id = lobby_id
+
+	var char_arr := multiplayer_me.characters if is_me else multiplayer_opponent.characters
+	var character: Character = char_arr[idx_character]
+	print("%s Instantiate Char %s" % [ "server" if Lobby.is_server() else "client", character.name ])
+
+	var actor: BGActor = ps_rpg_actor.instantiate()
+	teams[idx_team].actors.append(actor)
+	actor.position.x = -200 if is_me else 200
+	actor.character = character
+
+	actor.multiplayer_id = multiplayer_id
+
+	if is_me:
+		var hud: BattleHUD = ps_selection_hud.instantiate()
+		hud.populate_action_list(character)
+		_huds.add_child(hud)
+		actor.selector = hud.selector
+	elif Lobby.is_server():
+		var cs: ClientSelector = ps_client_selector.instantiate()
+		cs.peer_id = lobby_id
+		_huds.add_child(cs)
+		actor.selector = cs.selector
+
+	_actors.add_child(actor)
+
+	actor.update_ui()
+	actors_by_multiplayer_id[multiplayer_id] = actor
 
 ## [b]Client[/b] Triggers the client's selection process and returns the results back to the server
 func client_selection(sender: int, me_: int, allies_: Array[int], opponents_: Array[int]) -> void:
-	pass
+	var me: BGActor = actors_by_multiplayer_id[me_]
+	var allies: Array[BGActor] = []
+	var opponents: Array[BGActor] = []
+	for id in allies_:
+		allies.append(actors_by_multiplayer_id[id])
+	for id in opponents_:
+		opponents.append(actors_by_multiplayer_id[id])
+
+	var params := await me.make_choice(allies, opponents)
+	var target := -1
+	var action := ""
+	if len(params) == 2:
+		target = (params[0] as BGActor).multiplayer_id
+		action = (params[1] as Action).resource_path
+
+	Lobby.client_action_selected.rpc_id(sender, target, action)
 
 ## [b]Client[/b] Takes the state of the battle and updates the battleground to reflect it
 ##
 ## As of now that only involves the health bars
 func update_battle_state(state: Dictionary) -> void:
-	pass
+	for multiplayer_id: int in state:
+		var bga: BGActor = actors_by_multiplayer_id[multiplayer_id]
+		bga.character.health = state[multiplayer_id].health
+		bga.update_ui()
 
 ## [b]Client[/b] Ends the multiplayer battle on the client
 ##
 ## Takes indexes for the teams to denote who won and who lost
 func client_end_multiplayer_battle(winner_id: int, losers_ids: Array[int]) -> void:
-	pass
+	var winner: Team = null
+	var losers: Array[Team] = []
+	for team in teams:
+		if winner == null and team.lobby_id == winner_id:
+			winner = team
+		else:
+			losers.append(team)
+
+	_end_multiplayer_battle(winner, losers)
 
 func _serialise_battle_state() -> Dictionary:
-	return {}
+	var state := {}
+	for bga: BGActor in _actors.get_children():
+		state[bga.multiplayer_id] = { health = bga.character.health }
+	return state
 
 func _end_multiplayer_battle(winner: Team, losers: Array[Team]) -> void:
-	pass
+	if not in_multiplayer:
+		return
+
+	in_multiplayer = false
+
+	if Lobby.is_server():
+		var loser_ids: Array[int] = []
+		for loser in losers:
+			loser_ids.append(loser.lobby_id)
+		Lobby.send_battle_results.rpc(winner.lobby_id, loser_ids)
+
+	Lobby.leave_lobby.call_deferred()
+	_clean_up_battleground()

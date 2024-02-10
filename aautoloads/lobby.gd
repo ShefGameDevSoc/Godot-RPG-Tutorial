@@ -160,33 +160,44 @@ func _get_player_characters() -> Array[Dictionary]:
 # BATTLEGROUND FUNCTIONS
 #########
 
+var current_peer_selector: ClientSelector
+
 ## [b]Server[/b] Sends the winner and losers from the battle to client
 @rpc("authority", "call_remote")
 func send_battle_results(winner: int, losers_: Array) -> void:
-	pass
+	var losers: Array[int] = []
+	losers.assign(losers_)
+	Game.battleground.end_client_multiplayer_battle(winner, losers)
 
 ## [b]Server[/b] Tells the client what [BGActor]s to instantiate in its local battleground
 ## scene
 @rpc("authority", "call_local", "reliable")
 func instantiate_actor(lobby_id: int, idx_character: int, multiplayer_id: int) -> void:
-	pass
+	Game.battleground.multiplayer_instantiate(lobby_id, idx_character, multiplayer_id)
 
 ## [b]Server[/b] Tells the client to begin selecting their attack and target
 @rpc("authority", "call_remote", "reliable")
 func peer_select_action(me: int, allies_: Array, opponents_: Array) -> void:
-	pass
+	var allies: Array[int]
+	var opponents: Array[int]
+	allies.assign(allies_)
+	opponents.assign(opponents_)
+	Game.battleground.client_selection(multiplayer.get_remote_sender_id(),
+									   me, allies, opponents)
 
 ## [b]Client[/b] Sends the target index and [Action] resource path to the server
 @rpc("any_peer", "call_remote", "reliable")
 func client_action_selected(target: int, action: String) -> void:
-	pass
+	if current_peer_selector:
+		current_peer_selector.peer_action_selected(target, action)
+		current_peer_selector = null
 
 ## [b]Server[/b] Tells the client the new state of the battleground for it to update to
 @rpc("authority", "call_remote", "reliable")
 func update_battle_state(state: Dictionary) -> void:
-	pass
+	Game.battleground.update_battle_state(state)
 
 ## [b]Server[/b] Tells all peers (ie. the server player and the client player) to go to the battleground
 @rpc("any_peer", "call_local", "reliable")
 func show_battleground() -> void:
-	pass
+	Game.battleground.show()

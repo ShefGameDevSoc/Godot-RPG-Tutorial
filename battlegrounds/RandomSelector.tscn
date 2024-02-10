@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://cdx3etyi277t5"]
+[gd_scene load_steps=3 format=3 uid="uid://c06a60fijkgr1"]
 
 [ext_resource type="Script" path="res://scripts/battleground/random_selector.gd" id="1_52af0"]
 [ext_resource type="Script" path="res://scripts/battleground/selector_interface.gd" id="2_es68n"]
