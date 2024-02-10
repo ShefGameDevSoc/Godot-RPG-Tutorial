@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Action" load_steps=2 format=3 uid="uid://c3x448kudyb3i"]
+
+[ext_resource type="Script" path="res://scripts/action/action.gd" id="1_gok2d"]
+
+[resource]
+script = ExtResource("1_gok2d")
+name = "Simple Heal"
+targets = 4
+type = 1
+cannot_miss = true
+accuracy = 100
+power = 20
+heal_by_points = true
+health_points = 30
+heal_ratio = 0

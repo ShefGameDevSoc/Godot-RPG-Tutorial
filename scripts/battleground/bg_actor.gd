@@ -21,6 +21,10 @@ var selector: SelectorInterface = null
 ## Triggers this actor's selection process
 ##
 ## This function is asynchronus
+## Returns either an empty array or an array with two elements
+## The empty array means no action was selected (the turn was skipped)
+## Otherwise it returns an array of two elements, the first being the BGActor target and the
+## second being the Action
 func make_choice(in_allies: Array[BGActor], in_opponents: Array[BGActor]) -> Array:
 	# Filter out untargetable actors
 	var is_targetable := func (actor: BGActor):

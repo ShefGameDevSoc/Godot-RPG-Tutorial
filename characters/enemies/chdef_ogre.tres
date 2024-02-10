@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CharacterDefinition" load_steps=4 format=3 uid="uid://b8tqo45cbjmib"]
+
+[ext_resource type="Resource" uid="uid://cghp2ukp5owic" path="res://actions/punch.tres" id="1_hbtap"]
+[ext_resource type="Resource" uid="uid://ddm7d73ihgbkv" path="res://actions/scratch.tres" id="2_a1ywn"]
+[ext_resource type="Script" path="res://scripts/character/character_definition.gd" id="3_bid0b"]
+
+[resource]
+script = ExtResource("3_bid0b")
+_name = "Goblin"
+_actions = Array[Resource("res://scripts/action/action.gd")]([ExtResource("1_hbtap"), ExtResource("2_a1ywn")])
+_health = 200
+_health_vicinity = 50
+_attack = 80
+_attack_vicinity = 10
+_defense = 30
+_defense_vicinity = 10
+_speed = 50
+_speed_vicinity = 10

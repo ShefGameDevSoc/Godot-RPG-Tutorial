@@ -2,6 +2,8 @@ class_name OWActor
 extends Node2D
 ## An Actor for the Overworld
 
+#// Declare a signal, putting the parameters it takes in parenthesis
+#// Note that signal parameters cannot have type declarations
 signal bumped_into_unwalkable(direction)
 signal other_entered_my_cell(other_actor)
 signal actor_died()
@@ -22,6 +24,7 @@ func check_if_alive() -> void:
 		if c.health > 0:
 			return
 
+	#// Emitting a signal, everyone connected to this signal will get called
 	actor_died.emit()
 
 func _ready():

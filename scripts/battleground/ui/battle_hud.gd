@@ -31,10 +31,13 @@ func _ready() -> void:
 	_hide()
 
 func _on_ac_attack_pressed():
-	pass
+	view_main.hide()
+	view_command_list.show()
+	view_select_target.hide()
 
 func _on_ac_skip_pressed():
-	pass
+	selector.action_selected.emit([])
+	close_hud()
 
 func _show() -> void:
 	position.x = 0
@@ -62,6 +65,9 @@ func _on_select_target_back_pressed():
 	view_main.hide()
 	view_command_list.show()
 	view_select_target.hide()
+
+func _on_action_entry_selected(action: Action) -> void:
+	pass
 
 func _submit_action(action: Action, target: BGActor) -> void:
 	pass

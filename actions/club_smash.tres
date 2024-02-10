@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Action" load_steps=2 format=3 uid="uid://yau8a57neubj"]
+
+[ext_resource type="Script" path="res://scripts/action/action.gd" id="1_hb3oc"]
+
+[resource]
+script = ExtResource("1_hb3oc")
+name = "Club Smash"
+targets = 4
+type = 0
+cannot_miss = false
+accuracy = 85
+power = 70
+heal_by_points = true
+health_points = 0
+heal_ratio = 0

@@ -9,8 +9,10 @@ extends Node2D
 
 const UNUSED_TILE_COORDS := Vector2i(100000, 100000)
 
+#// Export a variable with an allowed range of 0.5 to 5
 @export_range(0.5, 5) var move_speed: float = 1.6
 
+#// Export a variable with no limit on its input
 @export var tile_map_ground_layer := 1
 
 @export var tilemap: TileMap

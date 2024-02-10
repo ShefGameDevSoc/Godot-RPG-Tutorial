@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Action" load_steps=2 format=3 uid="uid://ddm7d73ihgbkv"]
+
+[ext_resource type="Script" path="res://scripts/action/action.gd" id="1_crem8"]
+
+[resource]
+script = ExtResource("1_crem8")
+name = "Punch"
+targets = 4
+type = 0
+cannot_miss = false
+accuracy = 100
+power = 25
+heal_by_points = true
+health_points = 0
+heal_ratio = 0
