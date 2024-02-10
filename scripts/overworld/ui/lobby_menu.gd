@@ -89,7 +89,7 @@ func _filter_text_edit(te: TextEdit, no_alpha := false) -> void:
 	te.set_caret_column(len(filtered_text))
 
 func _on_join_pressed() -> void:
-	if _name.text == "" or _ip_entry.text == "":
+	if _name.text == "":
 		return
 
 	var error := Lobby.join_lobby(_ip_entry.text, _name.text)
