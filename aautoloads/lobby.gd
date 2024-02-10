@@ -111,7 +111,7 @@ func _on_connected_fail() -> void:
 func _on_server_disconnected() -> void:
 	multiplayer.multiplayer_peer = null
 	players.clear()
-	Game.battleground.end_multiplayer_battle(1, [ 1 ])
+	Game.battleground.client_end_multiplayer_battle(1, [ 1 ])
 	print("Server disconnected")
 
 #// The rpc annotation

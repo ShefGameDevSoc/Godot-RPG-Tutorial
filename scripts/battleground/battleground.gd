@@ -115,8 +115,11 @@ func update_battle_state(state: Dictionary) -> void:
 ## [b]Client[/b] Ends the multiplayer battle on the client
 ##
 ## Takes indexes for the teams to denote who won and who lost
-func end_multiplayer_battle(winner_id: int, losers_ids: Array[int]) -> void:
+func client_end_multiplayer_battle(winner_id: int, losers_ids: Array[int]) -> void:
 	pass
 
 func _serialise_battle_state() -> Dictionary:
 	return {}
+
+func _end_multiplayer_battle(winner: Team, losers: Array[Team]) -> void:
+	pass
