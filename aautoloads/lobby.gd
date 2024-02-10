@@ -11,6 +11,10 @@ signal player_connected(peer_id, player_info)
 signal player_disconnected(peer_id)
 signal server_disconnected
 
+#// We define the Port Number to use
+#// Port numbers define channels for computers to communicate with each other
+#// Port numbers range from 0 - 65'536 although many of them are resolved
+#// https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
 const PORT = 4433
 const MAX_CONNECTIONS = 2
 
@@ -18,6 +22,8 @@ var players := {}
 var player_info: Dictionary
 
 func _ready() -> void:
+	#// multiplayer is a field on every Node that is used to connect to Godot's multplayer system
+	#// Here we are wiring up some signals
 	multiplayer.peer_connected.connect(_on_player_connected)
 	multiplayer.peer_disconnected.connect(_on_player_disconnected)
 	multiplayer.connected_to_server.connect(_on_connected_ok)
@@ -28,11 +34,13 @@ func _ready() -> void:
 ##
 ## To be used by the host for the lobby
 func create_lobby(name: String) -> Error:
+	#// Instantiate a multiplayer peer and use it create a server
 	var peer := ENetMultiplayerPeer.new()
 	var error: Error = peer.create_server(PORT, MAX_CONNECTIONS)
 	if error:
 		return error
 
+	#// If there are no errors assign it the multiplayer object
 	multiplayer.multiplayer_peer = peer
 
 	var chars := _get_player_characters()
@@ -53,6 +61,7 @@ func join_lobby(address: String, name: String) -> Error:
 	if not address:
 		address = "127.0.0.1"
 
+	#// Create a multiplayer peer, but this use it create a client for the server at the address and port
 	var peer := ENetMultiplayerPeer.new()
 	var error: Error = peer.create_client(address, PORT)
 	if error:
@@ -84,6 +93,7 @@ func is_server() -> bool: return multiplayer.multiplayer_peer and multiplayer.is
 func get_id() -> int: return multiplayer.get_unique_id() if multiplayer.has_multiplayer_peer() else -1
 
 func _on_player_connected(id: int) -> void:
+	#// Calls an rpc function for a specific lobby ID
 	_register_player.rpc_id(id, player_info)
 
 func _on_player_disconnected(id: int) -> void:
@@ -104,6 +114,9 @@ func _on_server_disconnected() -> void:
 	Game.battleground.end_multiplayer_battle(1, [ 1 ])
 	print("Server disconnected")
 
+#// The rpc annotation
+#// Attach this to function and you can call it on peers in a multiplayer game
+#// We'll talk about this more next
 @rpc("any_peer", "reliable")
 func _register_player(peer_info: Dictionary) -> void:
 	var id: int = multiplayer.get_remote_sender_id()

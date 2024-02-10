@@ -16,7 +16,7 @@ const ps_selection_hud := preload("res://battlegrounds/ui/BattleHUD.tscn")
 
 enum BattleType { AI, ONLINE }
 
-#// The @onready decorator says that this variable will be set just before the _ready() function
+#// The @onready annotation says that this variable will be set just before the _ready() function
 #// is called
 #// $ is used to declare a node path, e.g. $Actors points to the child node called 'Actors'
 @onready var _actors := $Actors
