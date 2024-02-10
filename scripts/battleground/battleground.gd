@@ -13,6 +13,7 @@ extends Node2D
 #// The preload function loads an asset from the file system
 const ps_rpg_actor := preload("res://actors/battleground/BGActor.tscn")
 const ps_selection_hud := preload("res://battlegrounds/ui/BattleHUD.tscn")
+const ps_random_selector := preload("res://battlegrounds/RandomSelector.tscn")
 
 enum BattleType { AI, ONLINE }
 
@@ -54,6 +55,39 @@ var multiplayer_opponent: PeerBattler
 #// and the triling return type (-> void)
 #// Note that the ending colon (:) is mandatory
 func startup_battle(players: Array[Character], enemies: Array[Character]) -> void:
+	teams = []
+	var team := Team.new()
+	for char in players:
+		var actor: BGActor = ps_rpg_actor.instantiate()
+		team.actors.append(actor)
+		actor.position.x = -200
+		_actors.add_child(actor)
+
+		var hud: BattleHUD = ps_selection_hud.instantiate()
+		hud.populate_action_list(char)
+		_huds.add_child(hud)
+		actor.selector = hud.selector
+
+		actor.character = char
+		actor.update_ui()
+
+	teams.append(team)
+	team = Team.new()
+
+	for char in enemies:
+		var actor: BGActor = ps_rpg_actor.instantiate()
+		team.actors.append(actor)
+		actor.position.x = 200
+		_actors.add_child(actor)
+
+		var rs: RandomSelector = ps_random_selector.instantiate()
+		_huds.add_child(rs)
+		actor.selector = rs.selector
+
+		actor.character = char
+		actor.update_ui()
+
+	teams.append(team)
 	#// A function call
 	show()
 
@@ -74,12 +108,92 @@ func _clean_up_battleground() -> void:
 
 func _end_battle(winner: Team, losers: Array[Team]) -> void:
 	hide()
+	for loser in losers:
+		for actor in loser.actors:
+			if actor.is_in_group("player"):
+				get_tree().quit()
+
+	_clean_up_battleground()
 
 func _execute_turn() -> void:
 	in_turn = true
+	var all_actors := _actors.get_children()
+
+	# Here is where you would sort by speed
+
+	for rpga: BGActor in all_actors:
+		print("%s 's turn" % rpga.character.name)
+		var my_team: Team = null
+		for team: Team in teams:
+			if rpga in team.actors:
+				my_team = team
+				break
+
+		if my_team == null:
+			print("Unknown BG Actor %s" % rpga.name)
+			_actors.remove_child(rpga)
+			continue
+
+		var allies: Array[BGActor] = []
+		var opponents: Array[BGActor] = []
+		for team: Team in teams:
+			if team == my_team:
+				allies = allies + team.actors
+			else:
+				opponents = opponents + team.actors
+
+		var params := await rpga.make_choice(allies, opponents)
+		if len(params) == 0:
+			continue
+		var target: BGActor = params[0]
+		var action: Action = params[1]
+		_apply_action(rpga, target, action)
+
+	in_turn = false
 
 func _apply_action(user: BGActor, target: BGActor, action: Action) -> void:
-	pass
+	if not action.cannot_miss and float(action.accuracy) < randf() * 100.0:
+		print("%s's attack missed!" % user.character.name)
+		return
+
+	match action.type:
+		Action.Type.ATTACK:
+			# Calculation derived from Pokemon's damage calculations
+			# https://bulbapedia.bulbagarden.net/wiki/Damage
+			var damage := int(action.power * user.character.attack
+						  / target.character.defense * (1.0 - randf() * 0.2))
+			print("Dealing %d damage to %s" % [ damage, target.character.name ])
+			target.character.health = max(0, target.character.health - damage)
+
+		Action.Type.HEALING:
+			var heal_points_from_ratio := int(target.character.max_health * action.heal_ratio)
+			var to_heal: int = action.health_points if action.health_points else heal_points_from_ratio
+			print("Healing %s by %s" % [ target.character.name, to_heal ])
+			target.character.health = min(target.character.max_health,
+										  target.character.health + to_heal)
+
+	target.update_ui()
+
+	if target.character.health <= 0:
+		print("%s has died" % target.name)
+		_check_for_battle_end()
+
+func _check_for_battle_end() -> void:
+	var is_dead := func (actor: BGActor) -> bool:
+		return actor.character.health <= 0
+
+	var not_all_dead: Array[Team] = []
+	var all_dead: Array[Team] = []
+	for team: Team in teams:
+		if team.actors.all(is_dead):
+			all_dead.append(team)
+		else:
+			not_all_dead.append(team)
+
+	if len(not_all_dead) > 1:
+		return
+
+	_end_battle(not_all_dead[0], all_dead)
 
 #######################
 ## MULTIPLAYER STUFF ##

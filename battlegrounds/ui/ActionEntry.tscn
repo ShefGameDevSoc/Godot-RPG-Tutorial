@@ -1,0 +1,85 @@
+[gd_scene load_steps=2 format=3 uid="uid://dw7x1sx50vc24"]
+
+[ext_resource type="Script" path="res://scripts/battleground/ui/action_entry.gd" id="1_1qj2m"]
+
+[node name="ActionEntry" type="Button"]
+custom_minimum_size = Vector2(0, 60)
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 60.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+script = ExtResource("1_1qj2m")
+
+[node name="MCn" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_right = 24
+
+[node name="Fields" type="Control" parent="MCn"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Name" type="Label" parent="MCn/Fields"]
+layout_mode = 2
+offset_top = 18.0
+offset_right = 366.0
+offset_bottom = 41.0
+grow_vertical = 2
+text = "Action Name"
+vertical_alignment = 1
+
+[node name="LblPower" type="Label" parent="MCn/Fields"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -350.0
+offset_right = -299.0
+offset_bottom = 60.0
+grow_horizontal = 0
+text = "Power"
+vertical_alignment = 1
+
+[node name="Power" type="Label" parent="MCn/Fields"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -291.0
+offset_right = -240.0
+offset_bottom = 60.0
+grow_horizontal = 0
+text = "XXX"
+vertical_alignment = 1
+
+[node name="LblAccuracy" type="Label" parent="MCn/Fields"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -184.0
+offset_right = -114.0
+offset_bottom = 60.0
+grow_horizontal = 0
+text = "Accuracy"
+vertical_alignment = 1
+
+[node name="Accuracy" type="Label" parent="MCn/Fields"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -102.0
+offset_right = -59.0
+offset_bottom = 60.0
+grow_horizontal = 0
+text = "XXX"
+vertical_alignment = 1
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]

@@ -21,4 +21,4 @@ enum Type { ATTACK, HEALING }
 ## The number HP to heal
 @export var health_points: int
 ## The proportion of the target's health to heal
-@export_range(0.0, 1.0) var heal_ratio: float
+@export_range(0, 100) var heal_ratio: int

@@ -32,4 +32,6 @@ visible = false
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="EscapeMenu" parent="CanvasLayer" instance=ExtResource("10_rv624")]
-offset_bottom = 13260.0
+offset_left = 780.0
+offset_right = 1020.0
+offset_bottom = 14040.0
