@@ -167,7 +167,7 @@ var current_peer_selector: ClientSelector
 func send_battle_results(winner: int, losers_: Array) -> void:
 	var losers: Array[int] = []
 	losers.assign(losers_)
-	Game.battleground.end_client_multiplayer_battle(winner, losers)
+	Game.battleground.client_end_multiplayer_battle(winner, losers)
 
 ## [b]Server[/b] Tells the client what [BGActor]s to instantiate in its local battleground
 ## scene
